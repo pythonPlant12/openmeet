@@ -64,6 +64,11 @@ jobs:
         working-directory: openmeet-server
         run: cargo test
 
+        # Deep check
       - name: Clippy
         working-directory: openmeet-server
         run: cargo clippy -- -D warnings
+      
+      - name: Check
+        working-directory: openmeet-server
+        run: cargo check
