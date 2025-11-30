@@ -49,7 +49,12 @@ services:
     command:
       - -c
       - |
-        envsubst < /etc/turnserver.conf.template > /tmp/turnserver.conf
+        sed -e "s/\$${TURN_REALM}/$TURN_REALM/g" \
+            -e "s/\$${DOMAIN}/$DOMAIN/g" \
+            -e "s/\$${TURN_USER}/$TURN_USER/g" \
+            -e "s/\$${TURN_PASSWORD}/$TURN_PASSWORD/g" \
+            -e "s/\$${VPS_IP}/$VPS_IP/g" \
+            /etc/turnserver.conf.template > /tmp/turnserver.conf
         exec turnserver -c /tmp/turnserver.conf
 
   # Nginx - Reverse Proxy with SSL
