@@ -1,6 +1,6 @@
 [submodule "openmeet-client"]
 	path = openmeet-client
-	url = git@github.com:pythonPlant12/openmeet-client.git
+	url = https://github.com/pythonPlant12/openmeet-client.git
 [submodule "openmeet-server"]
 	path = openmeet-server
-	url = git@github.com:pythonPlant12/openmeet-server.git
+	url = https://github.com/pythonPlant12/openmeet-server.git
