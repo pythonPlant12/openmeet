@@ -7,8 +7,7 @@ cd "$SCRIPT_DIR"
 # Load environment variables
 source .env
 
-DOMAIN="${DOMAIN:-openmeet.eu}"
-EMAIL="${SSL_EMAIL:-admin@openmeet.eu}"
+DOMAIN="${DOMAIN:-openmeets.eu}"
 
 echo "=== OpenMeet Deployment ==="
 echo "Domain: $DOMAIN"
@@ -33,36 +32,16 @@ fi
 echo "=== Creating directories ==="
 mkdir -p deployment/nginx
 mkdir -p deployment/coturn
-mkdir -p openmeet/certbot/conf
-mkdir -p openmeet/certbot/www
 mkdir -p certs
 
-# Check if SSL certificates exist
-CERT_PATH="openmeet/certbot/conf/live/$DOMAIN"
+# Check if SSL certificates exist (managed by NT-Solutions gateway)
+CERT_PATH="/home/debian/nt-solutions/nginx/certbot/conf/live/$DOMAIN"
 if [ ! -d "$CERT_PATH" ]; then
-    echo "=== SSL certificates not found, requesting new ones ==="
-
-    # Start nginx temporarily for ACME challenge
-    sudo docker compose up -d nginx
-    sleep 5
-
-    # Request certificates
-    sudo docker run --rm \
-        -v "$(pwd)/openmeet/certbot/conf:/etc/letsencrypt" \
-        -v "$(pwd)/openmeet/certbot/www:/var/www/certbot" \
-        certbot/certbot certonly \
-        --webroot \
-        --webroot-path=/var/www/certbot \
-        --email "$EMAIL" \
-        --agree-tos \
-        --no-eff-email \
-        -d "$DOMAIN" \
-        -d "www.$DOMAIN" \
-        -d "sfu.$DOMAIN"
-
-    echo "[OK] SSL certificates obtained"
+    echo "WARNING: SSL certificates not found at $CERT_PATH"
+    echo "Run init-letsencrypt-openmeet.sh in NT-Solutions first!"
+    echo "Continuing anyway (nginx may fail to start without certs)..."
 else
-    echo "[OK] SSL certificates found"
+    echo "[OK] SSL certificates found at $CERT_PATH"
 fi
 
 # Stop existing containers
