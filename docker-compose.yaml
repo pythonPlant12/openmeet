@@ -1,0 +1,88 @@
+services:
+  # Frontend - Vue 3
+  frontend:
+    container_name: openmeet_frontend
+    build:
+      context: ./openmeet-client
+      dockerfile: Dockerfile
+    env_file:
+      - ./openmeet-client/.env
+    networks:
+      - openmeet_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # SFU - Rust WebRTC (Selective Forwarding Unit)
+  sfu:
+    container_name: openmeet_sfu
+    build:
+      context: ./openmeet-server
+      dockerfile: Dockerfile
+    env_file:
+      - ./openmeet-server/.env
+    volumes:
+      - ./certs:/app/certs:ro
+    networks:
+      - openmeet_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "8081"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # TURN Server - CoTURN for NAT traversal
+  coturn:
+    container_name: openmeet_coturn
+    image: coturn/coturn:latest
+    network_mode: host
+    env_file:
+      - ./.env
+    volumes:
+      - ./deployment/coturn/turnserver.conf.template:/etc/turnserver.conf.template:ro
+    restart: unless-stopped
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        envsubst < /etc/turnserver.conf.template > /tmp/turnserver.conf
+        exec turnserver -c /tmp/turnserver.conf
+
+  # Nginx - Reverse Proxy with SSL
+  nginx:
+    container_name: openmeet_nginx
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deployment/nginx/openmeet.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./openmeet/certbot/conf:/etc/letsencrypt:ro
+      - ./openmeet/certbot/www:/var/www/certbot:ro
+    networks:
+      - openmeet_network
+    depends_on:
+      - frontend
+      - sfu
+    restart: unless-stopped
+
+  # Certbot
+  certbot:
+    container_name: openmeet_certbot
+    image: certbot/certbot:latest
+    volumes:
+      - ./openmeet/certbot/conf:/etc/letsencrypt
+      - ./openmeet/certbot/www:/var/www/certbot
+    # Runs every 12 hours to check and renew if needed
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done'"
+    restart: unless-stopped
+
+# Networks
+networks:
+  openmeet_network:
+    name: openmeet_network
+    driver: bridge

@@ -1,0 +1,17 @@
+# Environment files
+.env
+**/.env
+
+# SSL certificates
+certs/
+*.pem
+*.key
+*.crt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

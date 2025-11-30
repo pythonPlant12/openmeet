@@ -1,0 +1,69 @@
+# Test Stage
+
+name: Test
+
+on:
+  workflow_run:
+    workflows: ["Build"]
+    types: [completed]
+    branches: [master]
+
+jobs:
+  # Test Client
+  test-client:
+    name: Test Client
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+          cache-dependency-path: openmeet-client/yarn.lock
+
+      - name: Install dependencies
+        working-directory: openmeet-client
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        working-directory: openmeet-client
+        run: yarn lint
+
+      - name: Unit tests
+        working-directory: openmeet-client
+        run: yarn test:unit --run
+
+  # Test Server
+  test-server:
+    name: Test Server
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Rust
+        uses: dtolnay/rust-action@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            openmeet-server/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('openmeet-server/Cargo.lock') }}
+
+      - name: Run tests
+        working-directory: openmeet-server
+        run: cargo test
+
+      - name: Clippy
+        working-directory: openmeet-server
+        run: cargo clippy -- -D warnings

@@ -1,0 +1,75 @@
+# Build Stage
+
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  # Build Client
+  build-client:
+    name: Build Client
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+          cache-dependency-path: openmeet-client/yarn.lock
+
+      - name: Install dependencies
+        working-directory: openmeet-client
+        run: yarn install --frozen-lockfile
+
+      - name: Type check
+        working-directory: openmeet-client
+        run: yarn type-check
+
+      - name: Build
+        working-directory: openmeet-client
+        run: yarn build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-build
+          path: openmeet-client/dist
+          retention-days: 1
+
+  # Build Server
+  build-server:
+    name: Build Server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Rust
+        uses: dtolnay/rust-action@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            openmeet-server/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('openmeet-server/Cargo.lock') }}
+
+      - name: Check
+        working-directory: openmeet-server
+        run: cargo check --release
+
+      - name: Build
+        working-directory: openmeet-server
+        run: cargo build --release

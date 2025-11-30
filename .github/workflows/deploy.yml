@@ -1,0 +1,56 @@
+# Deploy Stage
+
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["Test"]
+    types: [completed]
+    branches: [master]
+
+jobs:
+  # Deploy to VPS
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    environment: production
+
+    steps:
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: 'placeholder'
+          if_key_exists: replace
+
+      - name: Add known hosts
+        run: ssh-keyscan -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        run: |
+          ssh -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
+            set -e
+
+            REPO_DIR=\"/home/debian/openmeet\"
+
+            # Clone or update repo
+            if [ ! -d \"\$REPO_DIR\" ]; then
+              cd /home/debian
+              git clone --recursive https://github.com/${{ github.repository }}.git openmeet
+            else
+              cd \$REPO_DIR
+              git fetch --all
+              git reset --hard origin/\$(git rev-parse --abbrev-ref HEAD)
+              git submodule update --init --recursive
+            fi
+
+            cd \$REPO_DIR
+            chmod +x deploy.sh
+            ./deploy.sh
+          "
+
+      - name: Health check
+        run: |
+          sleep 30
+          curl -f https://openmeet.eu/health || echo "Health check pending..."

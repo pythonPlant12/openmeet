@@ -1,0 +1,33 @@
+# CoTURN Configuration for OpenMeet
+
+listening-ip=0.0.0.0
+listening-port=3478
+tls-listening-port=5349
+
+# Relay ports
+min-port=49152
+max-port=65535
+
+# Realm
+realm=${TURN_REALM}
+server-name=turn.${DOMAIN}
+
+# Authentication
+user=${TURN_USER}:${TURN_PASSWORD}
+
+# External IP
+external-ip=${VPS_IP}
+
+# Logging
+verbose
+
+# Security
+fingerprint
+lt-cred-mech
+no-tcp-relay
+no-cli
+
+# Deny private IPs
+denied-peer-ip=10.0.0.0-10.255.255.255
+denied-peer-ip=172.16.0.0-172.31.255.255
+denied-peer-ip=192.168.0.0-192.168.255.255
