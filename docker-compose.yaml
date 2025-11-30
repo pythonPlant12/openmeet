@@ -52,32 +52,37 @@ services:
         envsubst < /etc/turnserver.conf.template > /tmp/turnserver.conf
         exec turnserver -c /tmp/turnserver.conf
 
-  # Nginx - Reverse Proxy with SSL (internal, gateway handles external traffic)
+  # Nginx - Reverse Proxy with SSL
   nginx:
     container_name: openmeet_nginx
     image: nginx:alpine
-    # No ports exposed - gateway handles external traffic via SNI routing
+    ports:
+      - "80:80"
+      - "443:443"
     volumes:
       - ./deployment/nginx/openmeet.conf:/etc/nginx/conf.d/default.conf:ro
-      # Certificates are managed by NT-Solutions certbot (shared gateway)
-      # On VPS: /home/debian/nt-solutions/nginx/certbot/conf
-      - /home/debian/nt-solutions/nginx/certbot/conf:/etc/letsencrypt:ro
+      - ./openmeet/certbot/conf:/etc/letsencrypt:ro
+      - ./openmeet/certbot/www:/var/www/certbot:ro
     networks:
       - openmeet_network
-      - shared_gateway_network
     depends_on:
       - frontend
       - sfu
     restart: unless-stopped
 
-  # NOTE: Certbot is handled by the gateway in NT-Solutions
-  # Certificates for openmeet.eu should be generated there
+  # Certbot
+  certbot:
+    container_name: openmeet_certbot
+    image: certbot/certbot:latest
+    volumes:
+      - ./openmeet/certbot/conf:/etc/letsencrypt
+      - ./openmeet/certbot/www:/var/www/certbot
+    # Runs every 12 hours to check and renew if needed
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done'"
+    restart: unless-stopped
 
 # Networks
 networks:
   openmeet_network:
     name: openmeet_network
     driver: bridge
-  shared_gateway_network:
-    external: true
-    name: shared_gateway_network
