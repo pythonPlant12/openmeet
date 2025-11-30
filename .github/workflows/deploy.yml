@@ -55,4 +55,4 @@ jobs:
       - name: Health check
         run: |
           sleep 30
-          curl -f https://openmeet.eu/health || echo "Health check pending..."
+          curl -f https://openmeets.eu/health || echo "Health check pending..."
