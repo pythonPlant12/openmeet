@@ -35,14 +35,16 @@ jobs:
             REPO_DIR=\"/home/debian/openmeet\"
 
             # Clone or update repo
-            if [ ! -d \"\$REPO_DIR\" ]; then
+            if [ ! -d \"\$REPO_DIR/.git\" ]; then
               cd /home/debian
+              rm -rf openmeet
               git clone --recursive https://github.com/${{ github.repository }}.git openmeet
             else
               cd \$REPO_DIR
               git fetch --all
               git reset --hard origin/\$(git rev-parse --abbrev-ref HEAD)
-              git submodule update --init --recursive
+              git submodule sync --recursive
+              git submodule update --init --recursive --force
             fi
 
             cd \$REPO_DIR
