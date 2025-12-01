@@ -1,0 +1,33 @@
+services:
+  frontend:
+    container_name: openmeet_frontend_dev
+    image: node:22-alpine
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./openmeet-client:/app
+      - /app/node_modules
+    environment:
+      - VITE_LANDING_PAGE=true
+      - VITE_SFU_WSS_URL=ws://localhost:8081/ws
+      - VITE_STUN_URL=stun:stun.l.google.com:19302
+    command: sh -c "yarn install && yarn dev --host 0.0.0.0"
+    depends_on:
+      - sfu
+
+  sfu:
+    container_name: openmeet_sfu_dev
+    build:
+      context: ./openmeet-server
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+      - "50000-50010:50000-50010/udp"
+    environment:
+      - RUST_LOG=info
+      - BIND_ADDRESS=0.0.0.0:8081
+      - USE_TLS=false
+      - STUN_URL=stun:stun.l.google.com:19302
+      - UDP_PORT_MIN=50000
+      - UDP_PORT_MAX=50010
