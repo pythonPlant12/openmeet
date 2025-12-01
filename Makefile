@@ -3,6 +3,9 @@
 DEV_COMPOSE = docker compose -f docker-compose.dev.yml
 PROD_COMPOSE = docker compose -f docker-compose.yaml
 
+build-dev: ## Build dev images
+	$(DEV_COMPOSE) build --no-cache
+
 dev: ## Start local development (frontend + SFU)
 	$(DEV_COMPOSE) up -d
 

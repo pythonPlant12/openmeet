@@ -1,4 +1,21 @@
 services:
+  postgres:
+    container_name: openmeet_postgres_dev
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=openmeet
+      - POSTGRES_PASSWORD=openmeet_dev
+      - POSTGRES_DB=openmeet
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openmeet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   frontend:
     container_name: openmeet_frontend_dev
     image: node:22-alpine
@@ -31,3 +48,13 @@ services:
       - STUN_URL=stun:stun.l.google.com:19302
       - UDP_PORT_MIN=50000
       - UDP_PORT_MAX=50010
+      - DATABASE_URL=postgres://openmeet:openmeet_dev@postgres:5432/openmeet
+      - JWT_SECRET=dev_secret_change_in_production
+      - ACCESS_TOKEN_MINUTES=15
+      - REFRESH_TOKEN_DAYS=7
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
