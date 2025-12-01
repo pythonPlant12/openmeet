@@ -9,13 +9,13 @@ build-dev: ## Build dev images
 dev: ## Start local development (frontend + SFU)
 	$(DEV_COMPOSE) up -d
 
-stop-dev: ## Stop dev containers
+stop: ## Stop dev containers
 	$(DEV_COMPOSE) down
 
-logs-dev: ## Show dev logs
+logs: ## Show dev logs
 	$(DEV_COMPOSE) logs -f
 
-clean-dev:
+rm:
 	## Remove dev containers and volumes	
 	$(DEV_COMPOSE) down -v --remove-orphans 2>/dev/null || true
 
