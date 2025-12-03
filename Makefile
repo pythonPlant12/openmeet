@@ -9,6 +9,10 @@ build-dev: ## Build dev images
 dev: ## Start local development (frontend + SFU)
 	$(DEV_COMPOSE) up -d
 
+restart: 
+	$(DEV_COMPOSE) down
+	$(DEV_COMPOSE) up -d
+
 stop: ## Stop dev containers
 	$(DEV_COMPOSE) down
 
@@ -18,18 +22,3 @@ logs: ## Show dev logs
 rm:
 	## Remove dev containers and volumes	
 	$(DEV_COMPOSE) down -v --remove-orphans 2>/dev/null || true
-
-build-prod: ## Build production images
-	$(PROD_COMPOSE) build
-
-start-prod: ## Start production
-	$(PROD_COMPOSE) up -d
-
-stop-prod: ## Stop production
-	$(PROD_COMPOSE) down
-
-logs-prod: ## Show production logs
-	$(PROD_COMPOSE) logs -f
-
-clean-prod: ## Remove containers and volumes
-	$(PROD_COMPOSE) down -v --remove-orphans 2>/dev/null || true
