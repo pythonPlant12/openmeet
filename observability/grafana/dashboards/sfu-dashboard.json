@@ -616,7 +616,7 @@
       "targets": [
         {
           "datasource": { "type": "loki", "uid": "loki" },
-          "expr": "{container_name=~\"openmeet_sfu.*\"}",
+          "expr": "{job=\"sfu\"}",
           "refId": "A"
         }
       ],
