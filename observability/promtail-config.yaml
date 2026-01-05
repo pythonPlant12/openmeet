@@ -9,16 +9,44 @@ clients:
   - url: http://loki:3100/loki/api/v1/push
 
 scrape_configs:
-  - job_name: sfu
+  - job_name: docker
     static_configs:
       - targets:
           - localhost
         labels:
-          job: sfu
+          job: docker
           __path__: /var/lib/docker/containers/*/*log
+
     pipeline_stages:
+      # Extract log content and attrs from Docker JSON
       - json:
           expressions:
             log: log
+            stream: stream
+            attrs: attrs
+
+      # Extract container tag from attrs
+      - json:
+          expressions:
+            tag: tag
+          source: attrs
+
+      # Extract container name from tag (format: container_name/image_id)
+      - regex:
+          expression: ^(?P<container>[^/]+)
+          source: tag
+
+      # Detect log level from log content
+      - regex:
+          expression: '(?i)(?P<level>(error|warn|info|debug|trace))'
+          source: log
+
+      # Set labels
+      - labels:
+          container:
+          level:
+          stream:
+
+      # Output the raw log
       - output:
           source: log

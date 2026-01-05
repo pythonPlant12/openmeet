@@ -123,7 +123,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "sfu_websocket_connections_total",
+          "expr": "increase(sfu_websocket_connections_total[$__range])",
           "refId": "A"
         }
       ],
@@ -160,7 +160,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "sfu_participants_joined_total",
+          "expr": "increase(sfu_participants_joined_total[$__range])",
           "refId": "A"
         }
       ],
@@ -197,7 +197,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "sfu_rooms_created_total",
+          "expr": "increase(sfu_rooms_created_total[$__range])",
           "refId": "A"
         }
       ],
@@ -323,11 +323,11 @@
           },
           "mappings": [],
           "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "cps"
+          "unit": "none"
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Disconnections/s" },
+            "matcher": { "id": "byName", "options": "Disconnections/min" },
             "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }]
           }
         ]
@@ -342,18 +342,18 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "rate(sfu_websocket_connections_total[1m])",
-          "legendFormat": "Connections/s",
+          "expr": "rate(sfu_websocket_connections_total[1m]) * 60",
+          "legendFormat": "Connections/min",
           "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "rate(sfu_websocket_disconnections_total[1m])",
-          "legendFormat": "Disconnections/s",
+          "expr": "rate(sfu_websocket_disconnections_total[1m]) * 60",
+          "legendFormat": "Disconnections/min",
           "refId": "B"
         }
       ],
-      "title": "Connection Rate",
+      "title": "Connection Rate (per min)",
       "type": "timeseries"
     },
     {
@@ -438,11 +438,11 @@
           },
           "mappings": [],
           "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "ops"
+          "unit": "none"
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Rooms Deleted/s" },
+            "matcher": { "id": "byName", "options": "Rooms Deleted/min" },
             "properties": [{ "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }]
           }
         ]
@@ -457,18 +457,18 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "rate(sfu_rooms_created_total[1m])",
-          "legendFormat": "Rooms Created/s",
+          "expr": "rate(sfu_rooms_created_total[1m]) * 60",
+          "legendFormat": "Rooms Created/min",
           "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "rate(sfu_rooms_deleted_total[1m])",
-          "legendFormat": "Rooms Deleted/s",
+          "expr": "rate(sfu_rooms_deleted_total[1m]) * 60",
+          "legendFormat": "Rooms Deleted/min",
           "refId": "B"
         }
       ],
-      "title": "Room Creation Rate",
+      "title": "Room Rate (per min)",
       "type": "timeseries"
     },
     {
@@ -505,15 +505,15 @@
           },
           "mappings": [],
           "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "ops"
+          "unit": "none"
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Failed/s" },
+            "matcher": { "id": "byName", "options": "Failed/min" },
             "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }]
           },
           {
-            "matcher": { "id": "byName", "options": "Created/s" },
+            "matcher": { "id": "byName", "options": "Created/min" },
             "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }]
           }
         ]
@@ -528,18 +528,18 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "rate(sfu_peer_connections_created_total[1m])",
-          "legendFormat": "Created/s",
+          "expr": "rate(sfu_peer_connections_created_total[1m]) * 60",
+          "legendFormat": "Created/min",
           "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "rate(sfu_peer_connection_failures_total[1m])",
-          "legendFormat": "Failed/s",
+          "expr": "rate(sfu_peer_connection_failures_total[1m]) * 60",
+          "legendFormat": "Failed/min",
           "refId": "B"
         }
       ],
-      "title": "Peer Connections",
+      "title": "Peer Connections (per min)",
       "type": "timeseries"
     },
     {
@@ -568,7 +568,7 @@
           },
           "mappings": [],
           "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "ops"
+          "unit": "none"
         },
         "overrides": []
       },
@@ -582,12 +582,12 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "rate(sfu_ice_candidates_received_total[1m])",
-          "legendFormat": "ICE Candidates/s",
+          "expr": "rate(sfu_ice_candidates_received_total[1m]) * 60",
+          "legendFormat": "ICE Candidates/min",
           "refId": "A"
         }
       ],
-      "title": "ICE Candidates Rate",
+      "title": "ICE Candidates (per min)",
       "type": "timeseries"
     },
     {
@@ -616,11 +616,11 @@
       "targets": [
         {
           "datasource": { "type": "loki", "uid": "loki" },
-          "expr": "{job=\"sfu\"}",
+          "expr": "{job=\"docker\", container=~\"$container\", level=~\"$level\"}",
           "refId": "A"
         }
       ],
-      "title": "SFU Server Logs",
+      "title": "Logs",
       "type": "logs"
     }
   ],
@@ -628,7 +628,44 @@
   "schemaVersion": 38,
   "style": "dark",
   "tags": ["openmeet", "sfu", "webrtc"],
-  "templating": { "list": [] },
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": false, "text": "All", "value": "$__all" },
+        "datasource": { "type": "loki", "uid": "loki" },
+        "definition": "label_values(container)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Container",
+        "multi": true,
+        "name": "container",
+        "options": [],
+        "query": "label_values(container)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": { "selected": false, "text": "All", "value": "$__all" },
+        "datasource": { "type": "loki", "uid": "loki" },
+        "definition": "label_values(level)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Log Level",
+        "multi": true,
+        "name": "level",
+        "options": [],
+        "query": "label_values(level)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
   "time": { "from": "now-1h", "to": "now" },
   "timepicker": {},
   "timezone": "browser",
