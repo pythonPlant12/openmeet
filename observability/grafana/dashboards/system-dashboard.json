@@ -466,8 +466,8 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "sum(rate(container_cpu_usage_seconds_total{id=~\"/docker/.+\"}[1m])) by (id) * 100",
-          "legendFormat": "{{id}}",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{name!=\"\"}[1m])) by (name) * 100",
+          "legendFormat": "{{name}}",
           "refId": "A"
         }
       ],
@@ -514,8 +514,8 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "container_memory_usage_bytes{id=~\"/docker/.+\"}",
-          "legendFormat": "{{id}}",
+          "expr": "container_memory_usage_bytes{name!=\"\"}",
+          "legendFormat": "{{name}}",
           "refId": "A"
         }
       ],
@@ -571,14 +571,14 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "sum(rate(container_network_receive_bytes_total{id=~\"/docker/.+\"}[1m])) by (id)",
-          "legendFormat": "Rx {{id}}",
+          "expr": "sum(rate(container_network_receive_bytes_total{name!=\"\"}[1m])) by (name)",
+          "legendFormat": "Rx {{name}}",
           "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "sum(rate(container_network_transmit_bytes_total{id=~\"/docker/.+\"}[1m])) by (id)",
-          "legendFormat": "Tx {{id}}",
+          "expr": "sum(rate(container_network_transmit_bytes_total{name!=\"\"}[1m])) by (name)",
+          "legendFormat": "Tx {{name}}",
           "refId": "B"
         }
       ],
@@ -634,14 +634,14 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "sum(rate(container_fs_reads_bytes_total{id=~\"/docker/.+\"}[1m])) by (id)",
-          "legendFormat": "Read {{id}}",
+          "expr": "sum(rate(container_fs_reads_bytes_total{name!=\"\"}[1m])) by (name)",
+          "legendFormat": "Read {{name}}",
           "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "sum(rate(container_fs_writes_bytes_total{id=~\"/docker/.+\"}[1m])) by (id)",
-          "legendFormat": "Write {{id}}",
+          "expr": "sum(rate(container_fs_writes_bytes_total{name!=\"\"}[1m])) by (name)",
+          "legendFormat": "Write {{name}}",
           "refId": "B"
         }
       ],
