@@ -616,7 +616,7 @@
       "targets": [
         {
           "datasource": { "type": "loki", "uid": "loki" },
-          "expr": "{job=\"docker\", container=~\"$container\", level=~\"$level\"}",
+          "expr": "{container=~\"$container\"} | level=~\"$level\"",
           "refId": "A"
         }
       ],
