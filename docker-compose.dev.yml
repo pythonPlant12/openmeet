@@ -35,12 +35,15 @@ services:
 
   sfu:
     container_name: openmeet_sfu
-    build:
-      context: ./openmeet-server
-      dockerfile: Dockerfile
+    image: rust:latest
+    working_dir: /app
     ports:
       - "8081:8081"
       - "50000-50010:50000-50010/udp"
+    volumes:
+      - ./openmeet-server:/app
+      - cargo_cache:/usr/local/cargo/registry
+      - target_cache:/app/target
     environment:
       - RUST_LOG=info
       - BIND_ADDRESS=0.0.0.0:8081
@@ -52,6 +55,8 @@ services:
       - JWT_SECRET=dev_secret_change_in_production
       - ACCESS_TOKEN_MINUTES=15
       - REFRESH_TOKEN_DAYS=7
+      - CARGO_TARGET_DIR=/app/target
+    command: sh -c "cargo install cargo-watch && cargo watch -x run"
     depends_on:
       postgres:
         condition: service_healthy
@@ -134,4 +139,6 @@ volumes:
   postgres_data:
   prometheus_data:
   grafana_data:
+  cargo_cache:
+  target_cache:
 
