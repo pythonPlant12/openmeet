@@ -56,6 +56,8 @@ services:
       - ACCESS_TOKEN_MINUTES=15
       - REFRESH_TOKEN_DAYS=7
       - CARGO_TARGET_DIR=/app/target
+      # jemalloc: return memory to OS (5 second decay)
+      - MALLOC_CONF=background_thread:true,dirty_decay_ms:5000,muzzy_decay_ms:5000
     command: sh -c "cargo install cargo-watch && cargo watch -x run"
     depends_on:
       postgres:
