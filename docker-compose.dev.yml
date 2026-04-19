@@ -58,6 +58,7 @@ services:
       - "--no-cli"
       - "--listening-ip=0.0.0.0"
       - "--external-ip=127.0.0.1"
+      - "--allow-loopback-peers"
 
   sfu:
     container_name: openmeet_sfu

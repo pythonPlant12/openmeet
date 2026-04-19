@@ -27,7 +27,5 @@ lt-cred-mech
 no-tcp-relay
 no-cli
 
-# Deny private IPs
-denied-peer-ip=10.0.0.0-10.255.255.255
-denied-peer-ip=172.16.0.0-172.31.255.255
-denied-peer-ip=192.168.0.0-192.168.255.255
+# Allow all peer IPs (including Docker internal networks)
+# For production behind NAT, TURN needs to relay to container IPs
