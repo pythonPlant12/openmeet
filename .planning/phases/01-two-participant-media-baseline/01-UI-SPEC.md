@@ -58,7 +58,7 @@ Exceptions: icon-only meeting controls must remain at the existing 48px (`h-12 w
 
 Rules:
 - Use only weights 400 and 600 for new meeting-screen copy; existing avatar initials may keep bold styling but do not introduce new text weights.
-- Diagnostic values use 12px monospace only inside the opt-in diagnostic panel; no user-facing status copy should be monospace.
+- Diagnostic values use 14px monospace only inside the opt-in diagnostic panel; no user-facing status copy should be monospace.
 
 ---
 
@@ -114,6 +114,8 @@ Additional required status copy:
 
 ## Meeting Screen Visual Contract
 
+Primary visual anchor: the video grid and active participant tile. Secondary visual anchor: the fixed meeting control bar. Tertiary visual anchor: diagnostics, visible only when toggled.
+
 ### Scope
 
 In scope:
@@ -160,7 +162,7 @@ Tile identity rules:
 Default UI must stay quiet. Diagnostic details are visible only when the existing Code/stats button is active.
 
 Diagnostic panel contract:
-- Position: fixed top-right, existing card surface and border, maximum width 320px, text 12px.
+- Position: fixed top-right, existing card surface and border, maximum width 320px, text 14px.
 - Content rows: machine state, peer connection state, ICE state, participant count, local participant ID, remote participant ID, remote stream ID, stream-owner mapping state, remote video track state, remote audio track state.
 - Row labels use muted foreground; values use monospace.
 - Status values: `waiting`, `joined`, `owner mapped`, `track received`, `audio missing`, `video missing`, `failed`.
