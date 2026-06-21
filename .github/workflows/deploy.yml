@@ -7,13 +7,14 @@ on:
     workflows: ["Test"]
     types: [completed]
     branches: [master]
+  workflow_dispatch:
 
 jobs:
   # Deploy to VPS
   deploy:
     name: Deploy to VPS
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     environment: production
 
     steps:
@@ -33,16 +34,18 @@ jobs:
             set -e
 
             REPO_DIR=\"/home/debian/openmeet\"
+            DEPLOY_BRANCH=\"master\"
 
             # Clone or update repo
             if [ ! -d \"\$REPO_DIR/.git\" ]; then
               cd /home/debian
               rm -rf openmeet
-              git clone --recursive https://github.com/${{ github.repository }}.git openmeet
+              git clone --branch \"\$DEPLOY_BRANCH\" --recursive https://github.com/${{ github.repository }}.git openmeet
             else
               cd \$REPO_DIR
               git fetch --all
-              git reset --hard origin/\$(git rev-parse --abbrev-ref HEAD)
+              git checkout \"\$DEPLOY_BRANCH\"
+              git reset --hard \"origin/\$DEPLOY_BRANCH\"
               git submodule sync --recursive
               git submodule update --init --recursive --force
             fi
