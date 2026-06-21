@@ -57,7 +57,7 @@ services:
       - "--no-multicast-peers"
       - "--no-cli"
       - "--listening-ip=0.0.0.0"
-      - "--external-ip=127.0.0.1"
+      - "--external-ip=${OPENMEET_DEV_HOST_IP:-127.0.0.1}"
       - "--allow-loopback-peers"
 
   sfu:
@@ -66,7 +66,7 @@ services:
     working_dir: /app
     ports:
       - "8081:8081"
-      - "50000-50010:50000-50010/udp"
+      - "50000-50100:50000-50100/udp"
     volumes:
       - ./openmeet-server:/app
       - cargo_cache:/usr/local/cargo/registry
@@ -79,8 +79,10 @@ services:
       - TURN_URL=turn:coturn:3478
       - TURN_USER=openmeet
       - TURN_PASSWORD=openmeet_dev_turn
+      # Set OPENMEET_DEV_HOST_IP to the host LAN IP when testing from phones or other laptops.
+      - PUBLIC_IP=${OPENMEET_DEV_HOST_IP:-}
       - UDP_PORT_MIN=50000
-      - UDP_PORT_MAX=50010
+      - UDP_PORT_MAX=50100
       - DATABASE_URL=postgres://openmeet:openmeet_dev@postgres:5432/openmeet
       - JWT_SECRET=dev_secret_change_in_production
       - ACCESS_TOKEN_MINUTES=15
@@ -175,4 +177,3 @@ volumes:
   grafana_data:
   cargo_cache:
   target_cache:
-
