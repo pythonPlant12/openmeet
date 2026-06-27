@@ -27,6 +27,8 @@ created: 2026-06-27
 
 **Phase posture:** Preserve the current dark meeting UI. This phase may extend existing status and error surfaces for reliability diagnostics, but it must not redesign the meeting experience or introduce new visual systems.
 
+**Primary-screen hierarchy:** The video grid is the primary visual anchor; bottom meeting controls are secondary; connection diagnostics/status panels are tertiary and must not compete with participant video tiles.
+
 ---
 
 ## Spacing Scale
@@ -98,10 +100,10 @@ Additional copy constraints:
 | Waiting state | First participant stays in the room with local media visible and participant count `1`; no error dialog appears while waiting for a second participant. |
 | Two-participant grid | When participant two joins, both participants remain visible in the existing grid; each remote tile attaches the correct remote stream and keeps audio playable through the mounted video element. |
 | Participant focus | Existing tile click-to-focus behavior remains unchanged. Do not add new meeting navigation patterns in this phase. |
-| Debug/status panel | Existing status toggle remains the only diagnostic UI surface. If extended, keep values short, bounded, secret-free, and readable at `12px` monospace. |
+| Debug/status panel | Existing status toggle remains the only diagnostic UI surface. If extended, keep values short, bounded, secret-free, and readable at the `14px` label size. |
 | Terminal disconnect | Peer connection `failed` and unexpected WebSocket close/reconnect exhaustion open the existing blocking connection error dialog. Primary recovery is `Reload Page`; secondary action is `Leave Meeting`. |
 | Transient disconnect | Recoverable browser `disconnected` states may be shown in diagnostics but should not immediately open a blocking dialog. |
-| Media toggles | Existing mute/camera controls retain current destructive styling for off states. Toggle resilience beyond the baseline is Phase 3 unless required by the root cause. |
+| Media toggles | Existing mute/camera controls retain current destructive styling for off states. Icon-only meeting controls must have accessible label fallbacks via visible tooltip text, `aria-label`, or the existing button text equivalent. Toggle resilience beyond the baseline is Phase 3 unless required by the root cause. |
 | Third participant | Any third-participant observation is non-blocking Phase 2 signal; do not add Phase 1 UI states or layout rules specifically for 3+ stability. |
 
 ---
