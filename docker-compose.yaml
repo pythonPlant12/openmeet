@@ -42,7 +42,7 @@ services:
       context: ./openmeet-server
       dockerfile: Dockerfile
     ports:
-      - "50000-50100:50000-50100/udp"
+      - "50000-51000:50000-51000/udp"
     env_file:
       - ./openmeet-server/.env
     environment:
