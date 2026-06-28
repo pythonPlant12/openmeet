@@ -81,6 +81,7 @@ ensure_allow "443/tcp" 'HTTPS frontend API WebSocket Grafana'
 ensure_allow "3478/udp" 'TURN STUN UDP'
 ensure_allow "3478/tcp" 'TURN STUN TCP fallback'
 ensure_allow "5349/tcp" 'TURN TLS'
+ensure_allow "50000:51000/udp" 'SFU media UDP range'
 ensure_allow "49152:65535/udp" 'TURN relay and SFU media UDP range'
 ensure_allow "49152:65535/tcp" 'TURN TCP relay range'
 
