@@ -36,10 +36,11 @@ Open these inbound ports on the VPS provider firewall and the OS firewall:
 3478/udp            TURN/STUN over UDP
 3478/tcp            TURN/STUN over TCP fallback
 5349/tcp            TURN over TLS, if enabled by the TURN config
-49152-65535/udp     CoTURN relay media ports
+50000-51000/udp     Direct SFU media ports
+51001-52000/udp     CoTURN relay media ports
 ```
 
-If you later expose direct SFU UDP media ports instead of relying on TURN relay candidates, also open the configured SFU UDP range, for example `50000-50100/udp`.
+The SFU and CoTURN ranges must not overlap when they run on the same VPS.
 
 Example with `ufw`:
 
@@ -50,7 +51,8 @@ sudo ufw allow 443/tcp
 sudo ufw allow 3478/udp
 sudo ufw allow 3478/tcp
 sudo ufw allow 5349/tcp
-sudo ufw allow 49152:65535/udp
+sudo ufw allow 50000:51000/udp
+sudo ufw allow 51001:52000/udp
 sudo ufw enable
 sudo ufw status verbose
 ```
@@ -196,7 +198,7 @@ STUN_URL=stun:stun.l.google.com:19302
 
 PUBLIC_IP=<VPS_PUBLIC_IP>
 UDP_PORT_MIN=50000
-UDP_PORT_MAX=50100
+UDP_PORT_MAX=51000
 ```
 
 `USE_TLS=false` is intentional for this Docker Compose setup because Nginx terminates HTTPS and proxies plain HTTP/WebSocket traffic to the SFU container.

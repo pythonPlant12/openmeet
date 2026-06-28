@@ -18,6 +18,7 @@ The reported production symptom is that the app works locally, but on the VPS de
 ### Reproduction Target
 - **D-01:** Reproduce the failure on the deployed VPS environment first, using the live UI at `https://openmeets.eu/room/1/` and server/container logs as the primary evidence source.
 - **D-02:** SSH access may be used for read-only log inspection and diagnostics, but code changes should be made locally unless a concrete blocker requires VPS-side debugging. Do not record or expose SSH credentials in planning docs, logs, commits, or UI output.
+- **D-02a:** The VPS SSH target is `debian@162.19.154.153`. The password was provided by the user in chat for this session only; treat it as an ephemeral secret and never persist it in repository artifacts, summaries, shell history snippets, screenshots, logs, or UI output.
 - **D-03:** If localhost and VPS behavior differ, VPS behavior wins for Phase 1 because the user-reported failure is production-only.
 - **D-04:** The primary reproduction shape is two fresh browser participants in the same room with audio/video enabled. After the two-participant path passes, a third participant may be observed only as non-blocking Phase 2 signal.
 
@@ -95,7 +96,7 @@ The reported production symptom is that the app works locally, but on the VPS de
 ## Specific Ideas
 
 - Start from the live production URL `https://openmeets.eu/room/1/` because that is where the user sees the two-participant disconnect.
-- Use VPS access for log inspection only; do not store credentials in artifacts.
+- Use VPS access through `ssh debian@162.19.154.153` for log inspection only; do not store credentials in artifacts.
 - Make silent WebSocket closure/reconnect exhaustion visible to the user, not just to console logs.
 - Capture enough evidence to answer whether failure is in signaling, SDP/ICE, stream ownership, RTP forwarding, or rendering.
 

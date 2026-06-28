@@ -14,6 +14,13 @@ This roadmap stabilizes the existing OpenMeet meeting flow in vertical reliabili
 **Goal:** Reproduce the current failure, identify the root cause, and make two participants reliably receive each other's audio/video.
 **Mode:** mvp
 **Requirements:** DIAG-01, DIAG-02, DIAG-03, MEDIA-01, MEDIA-02, MEDIA-03, MEDIA-04, MEDIA-05, MEDIA-06, VER-01, VER-02
+**Plans:** 5 plans
+Plans:
+- [ ] 01-01-PLAN.md — Reproduce/classify deployed two-participant failure and create browser smoke baseline
+- [ ] 01-02-PLAN.md — Surface terminal disconnects through the existing connection error dialog
+- [ ] 01-03-PLAN.md — Make client stream ownership deterministic and test-covered
+- [ ] 01-04-PLAN.md — Fix server RTP forwarding lock scope and preserve SFU architecture
+- [ ] 01-05-PLAN.md — Run final automated, VPS, and human two-browser verification
 **UI hint:** yes
 **Success Criteria**:
 1. A two-participant room join can be reproduced or simulated with enough instrumentation to locate the failing layer.

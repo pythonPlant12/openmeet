@@ -6,15 +6,18 @@
 
 ## User Constraints
 
-No `01-CONTEXT.md` / phase `CONTEXT.md` exists for this phase, so there are no user-locked phase decisions beyond the roadmap, requirements, and AGENTS.md directives. [VERIFIED: .planning/STATE.md + filesystem]
+Phase context now exists at `.planning/phases/01-two-participant-media-baseline/01-CONTEXT.md` and contains user-locked execution decisions for VPS-first reproduction, terminal disconnect UI, and final verification proof. Treat that file as the source of truth when it differs from this earlier research pass. [VERIFIED: .planning/phases/01-two-participant-media-baseline/01-CONTEXT.md]
 
 ### Locked Decisions
 - Preserve Vue 3, TypeScript, XState, Rust, Axum, WebRTC crate, Diesel, PostgreSQL, Docker Compose, and the existing SFU architecture unless a concrete defect requires a targeted change. [VERIFIED: AGENTS.md]
 - Start with the smallest stable two-user flow before widening to late joiners and 3+ participant cases. [VERIFIED: AGENTS.md]
 - Do not redesign the product; make the existing meeting experience dependable. [VERIFIED: AGENTS.md]
+- Reproduce the production failure first at `https://openmeets.eu/room/1/` and use VPS behavior as authoritative if it differs from local behavior. [VERIFIED: 01-CONTEXT.md]
+- Use VPS SSH only for read-only diagnostics through `debian@162.19.154.153`; never persist the password or other credentials in repo artifacts or output. [VERIFIED: 01-CONTEXT.md]
+- Terminal peer/signaling failures must be visible through the existing blocking connection error dialog with safe recovery copy. [VERIFIED: 01-CONTEXT.md + 01-UI-SPEC.md]
 
 ### the agent's Discretion
-- No explicit phase discretion document exists. Planner may choose targeted instrumentation, tests, and the smallest code fix that satisfies Phase 1 requirements. [VERIFIED: filesystem + ROADMAP.md]
+- The agent may choose targeted instrumentation, tests, and the smallest code fix that satisfies Phase 1 requirements, as long as the decisions in `01-CONTEXT.md` are preserved. [VERIFIED: 01-CONTEXT.md + ROADMAP.md]
 
 ### Deferred Ideas (OUT OF SCOPE)
 - Third/later participant late-join stability belongs to Phase 2. [VERIFIED: .planning/ROADMAP.md]
