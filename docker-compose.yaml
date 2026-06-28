@@ -211,5 +211,5 @@ volumes:
 # Networks
 networks:
   openmeet_network:
+    external: true
     name: openmeet_network
-    driver: bridge

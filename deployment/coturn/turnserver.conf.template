@@ -4,9 +4,10 @@ listening-ip=0.0.0.0
 listening-port=3478
 tls-listening-port=5349
 
-# Relay ports
-min-port=49152
-max-port=65535
+# TURN relay ports. Keep this separate from the SFU UDP media range
+# (50000-51000) because coturn and the SFU run on the same host.
+min-port=51001
+max-port=52000
 
 # Realm
 realm=${TURN_REALM}

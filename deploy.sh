@@ -43,6 +43,13 @@ mkdir -p openmeet/certbot/conf
 mkdir -p openmeet/certbot/www
 mkdir -p certs
 
+# The compose file uses an external named network so `docker compose down` and
+# Docker pruning cannot leave stale containers referencing a deleted network.
+echo "=== Ensuring Docker network exists ==="
+if ! sudo docker network inspect openmeet_network >/dev/null 2>&1; then
+    sudo docker network create openmeet_network >/dev/null
+fi
+
 # Check if SSL certificates exist
 CERT_PATH="openmeet/certbot/conf/live/$DOMAIN"
 if [ ! -d "$CERT_PATH" ]; then
