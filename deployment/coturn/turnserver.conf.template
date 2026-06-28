@@ -24,7 +24,6 @@ verbose
 # Security
 fingerprint
 lt-cred-mech
-no-tcp-relay
 no-cli
 
 # Allow all peer IPs (including Docker internal networks)

@@ -29,7 +29,7 @@ services:
       - VITE_LANDING_PAGE=true
       - VITE_SFU_WSS_URL=ws://localhost:8081/ws
       - VITE_STUN_URL=stun:stun.l.google.com:19302
-      - VITE_TURN_URL=turn:localhost:3478
+      - VITE_TURN_URL=turn:${OPENMEET_DEV_HOST_IP:-localhost}:3478
       - VITE_TURN_USER=openmeet
       - VITE_TURN_PASSWORD=openmeet_dev_turn
     command: sh -c "yarn install && yarn dev --host 0.0.0.0"
@@ -44,6 +44,7 @@ services:
       - "3478:3478/udp"
       - "3478:3478/tcp"
       - "49152-49200:49152-49200/udp"
+      - "49152-49200:49152-49200/tcp"
     command:
       - "-n"
       - "--log-file=stdout"
@@ -66,7 +67,7 @@ services:
     working_dir: /app
     ports:
       - "8081:8081"
-      - "50000-50100:50000-50100/udp"
+      - "50000-51000:50000-51000/udp"
     volumes:
       - ./openmeet-server:/app
       - cargo_cache:/usr/local/cargo/registry
@@ -79,10 +80,11 @@ services:
       - TURN_URL=turn:coturn:3478
       - TURN_USER=openmeet
       - TURN_PASSWORD=openmeet_dev_turn
-      # Set OPENMEET_DEV_HOST_IP to the host LAN IP when testing from phones or other laptops.
+      # Set OPENMEET_DEV_HOST_IP to the reachable host LAN/public IP when testing from phones or other laptops.
+      # Without it, remote browsers receive Docker/loopback ICE candidates and media will not connect.
       - PUBLIC_IP=${OPENMEET_DEV_HOST_IP:-}
       - UDP_PORT_MIN=50000
-      - UDP_PORT_MAX=50100
+      - UDP_PORT_MAX=51000
       - DATABASE_URL=postgres://openmeet:openmeet_dev@postgres:5432/openmeet
       - JWT_SECRET=dev_secret_change_in_production
       - ACCESS_TOKEN_MINUTES=15

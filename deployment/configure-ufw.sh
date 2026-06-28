@@ -82,6 +82,7 @@ ensure_allow "3478/udp" 'TURN STUN UDP'
 ensure_allow "3478/tcp" 'TURN STUN TCP fallback'
 ensure_allow "5349/tcp" 'TURN TLS'
 ensure_allow "49152:65535/udp" 'TURN relay and SFU media UDP range'
+ensure_allow "49152:65535/tcp" 'TURN TCP relay range'
 
 STALE_RULES=(
     5349/udp
