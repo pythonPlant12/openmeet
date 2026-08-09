@@ -83,7 +83,7 @@ openmeet/
 ### Prerequisites
 
 - Docker and Docker Compose
-- Node.js 22+ (for local frontend development)
+- Node.js 26.7.0 and pnpm 11.20.0 (for local frontend development)
 - Rust 1.70+ (for local backend development)
 
 ### Quick Start with Docker

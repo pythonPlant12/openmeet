@@ -25,12 +25,12 @@ analysis_date: 2026-06-19
 
 **Run Commands:**
 ```bash
-cd openmeet-client && yarn test:unit --run        # Run client Vitest unit/component tests once
-cd openmeet-client && yarn test:unit              # Run client Vitest in default/watch-capable mode
-cd openmeet-client && yarn test:browser           # Run Vitest browser tests with vitest.browser.config.ts
-cd openmeet-client && yarn test:e2e               # Run Playwright E2E tests from openmeet-client/e2e when present
-cd openmeet-client && yarn type-check             # Run vue-tsc --build
-cd openmeet-client && yarn lint                   # Run oxlint and eslint fix/check flow
+cd openmeet-client && pnpm test:unit --run        # Run client Vitest unit/component tests once
+cd openmeet-client && pnpm test:unit              # Run client Vitest in default/watch-capable mode
+cd openmeet-client && pnpm test:browser           # Run Vitest browser tests with vitest.browser.config.ts
+cd openmeet-client && pnpm test:e2e               # Run Playwright E2E tests from openmeet-client/e2e
+cd openmeet-client && pnpm type-check             # Run vue-tsc --build
+cd openmeet-client && pnpm lint                   # Run oxlint and eslint fix/check flow
 cd openmeet-server && cargo test                  # Run server Rust tests
 cd openmeet-server && cargo check                 # Type/check server code
 ```
@@ -197,7 +197,7 @@ function createAuthTestWrapper(initialAccessToken: string | null = null) {
 
 **View Coverage:**
 ```bash
-cd openmeet-client && yarn vitest --coverage     # Not a package script; requires coverage provider support if added
+cd openmeet-client && pnpm exec vitest --coverage # Not a package script; requires coverage provider support if added
 cd openmeet-server && cargo test                 # Runs tests; coverage tooling is not configured
 ```
 
@@ -220,8 +220,8 @@ cd openmeet-server && cargo test                 # Runs tests; coverage tooling 
 **E2E Tests:**
 - Playwright is configured in `openmeet-client/playwright.config.ts` with Chromium, Firefox, and WebKit projects.
 - Playwright uses `baseURL` `http://localhost:5173` locally and `http://localhost:4173` on CI, configured in `openmeet-client/playwright.config.ts`.
-- Playwright starts `npm run dev` locally and `npm run preview` on CI via `webServer` in `openmeet-client/playwright.config.ts`.
-- No `openmeet-client/e2e/` tests were detected; add user journey tests there when browser-level behavior needs coverage.
+- Playwright starts `pnpm dev` locally and `pnpm preview` on CI via `webServer` in `openmeet-client/playwright.config.ts`.
+- Multi-participant media E2E coverage lives in `openmeet-client/e2e/multi-participant-media.spec.ts`.
 
 ## Common Patterns
 
@@ -271,8 +271,8 @@ await wrapper.find('form').trigger('submit');
 ```
 
 **CI Testing Flow:**
-- Build workflow `.github/workflows/build.yml` runs client `yarn type-check` and `yarn build`, then server `cargo check --release` and `cargo build --release`.
-- Test workflow `.github/workflows/test.yml` runs after Build succeeds and executes client `yarn lint`, client `yarn test:unit --run`, server `cargo test`, and server `cargo check`.
+- Build workflow `.github/workflows/build.yml` runs client `pnpm type-check` and `pnpm build`, then server `cargo check --release` and `cargo build --release`.
+- Test workflow `.github/workflows/test.yml` runs after Build succeeds and executes client `pnpm lint`, client `pnpm test:unit --run`, server `cargo test`, and server `cargo check`.
 - Deploy workflow `.github/workflows/deploy.yml` runs only after Test succeeds.
 
 ---

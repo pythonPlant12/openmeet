@@ -2,6 +2,9 @@
 
 name: Test
 
+permissions:
+  contents: read
+
 on:
   workflow_run:
     workflows: ["Build"]
@@ -18,25 +21,31 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: openmeet-client/package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'yarn'
-          cache-dependency-path: openmeet-client/yarn.lock
+          node-version-file: openmeet-client/.nvmrc
+          cache: 'pnpm'
+          cache-dependency-path: openmeet-client/pnpm-lock.yaml
 
       - name: Install dependencies
         working-directory: openmeet-client
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
         working-directory: openmeet-client
-        run: yarn lint
+        run: pnpm lint
 
       - name: Unit tests
         working-directory: openmeet-client
-        run: yarn test:unit --run
+        run: pnpm test:unit --run
 
   # Test Server
   test-server:
@@ -47,6 +56,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable

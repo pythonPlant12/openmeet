@@ -198,17 +198,11 @@ status: current
 - Migration plan: Pin image versions/digests for `coturn`, Grafana stack, Rust dev image, and certbot; schedule controlled upgrades.
 - Files: `docker-compose.yaml`, `docker-compose.dev.yml`
 
-**Client production build installs dependencies without frozen lock enforcement:**
-- Risk: Docker build uses `yarn install` without `--frozen-lockfile`/immutable mode.
-- Impact: Image builds can drift from `openmeet-client/yarn.lock`.
-- Migration plan: Use `yarn install --frozen-lockfile` or the Yarn version-appropriate immutable install flag in `openmeet-client/Dockerfile`.
-- Files: `openmeet-client/Dockerfile`, `openmeet-client/yarn.lock`
-
 **Vite uses an alias to latest Rolldown Vite:**
 - Risk: `vite` is declared as `npm:rolldown-vite@latest`, which can change on every install.
 - Impact: Build and dev-server behavior can change without lockfile updates if installs are not immutable.
 - Migration plan: Pin an explicit Rolldown Vite version or return to stable Vite for production builds.
-- Files: `openmeet-client/package.json`, `openmeet-client/yarn.lock`
+- Files: `openmeet-client/package.json`, `openmeet-client/pnpm-lock.yaml`
 
 ## Missing Critical Features
 
@@ -226,11 +220,6 @@ status: current
 - Problem: The API and WebSocket message parsing do not define explicit payload size limits in app code.
 - Blocks: Predictable memory usage under malformed or oversized messages.
 - Files: `openmeet-server/src/main.rs`, `openmeet-server/src/signaling/handler.rs`
-
-**Automated E2E coverage is configured but no E2E tests are present:**
-- Problem: Playwright config points to `openmeet-client/e2e`, but no E2E files were detected.
-- Blocks: Regression detection for login, meeting join, device permissions, WebSocket connection, and chat flows.
-- Files: `openmeet-client/playwright.config.ts`, `openmeet-client/package.json`
 
 ## Test Coverage Gaps
 
@@ -276,7 +265,7 @@ status: current
 - Issue: Server Clippy is commented out, E2E tests are not run in workflows, and deployment health check allows failure with `|| echo`.
 - Files: `.github/workflows/test.yml`, `.github/workflows/build.yml`, `.github/workflows/deploy.yml`, `openmeet-client/playwright.config.ts`
 - Impact: Code quality, browser flow, and deployment failures can pass automation.
-- Fix approach: Enable `cargo clippy -- -D warnings`, add `yarn test:e2e` when E2E tests exist, and make production health check fail the deployment job.
+- Fix approach: Enable `cargo clippy -- -D warnings`, add `pnpm test:e2e` to CI, and make production health check fail the deployment job.
 
 ---
 

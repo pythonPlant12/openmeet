@@ -23,7 +23,7 @@ The immediate goal is not to redesign the product. It is to make the existing me
 ## Technology Stack
 
 ## Languages
-- TypeScript `~5.9.0` - Vue client source in `openmeet-client/src/**/*.ts` and Vue single-file components in `openmeet-client/src/**/*.vue`; configured by `openmeet-client/tsconfig.json`.
+- TypeScript `~6.0.3` - Vue client source in `openmeet-client/src/**/*.ts` and Vue single-file components in `openmeet-client/src/**/*.vue`; configured by `openmeet-client/tsconfig.json`.
 - Rust edition `2024` - SFU/API server in `openmeet-server/src/**/*.rs`; package metadata in `openmeet-server/Cargo.toml`.
 - Vue SFC template/CSS - UI components and pages in `openmeet-client/src/components/**/*.vue` and `openmeet-client/src/pages/**/*.vue`.
 - SQL - Diesel migrations in `openmeet-server/migrations/20251201000000_create_users/up.sql` and `openmeet-server/migrations/20251201000001_create_refresh_tokens/up.sql`.
@@ -32,11 +32,10 @@ The immediate goal is not to redesign the product. It is to make the existing me
 - NGINX config - SPA and reverse-proxy routing in `openmeet-client/docker-nginx.conf` and `deployment/nginx/nginx.conf`.
 ## Runtime
 - Browser runtime for the Vue SPA mounted from `openmeet-client/src/main.ts`.
-- Node.js `^20.19.0 || >=22.12.0` for client tooling, declared in `openmeet-client/package.json`.
-- Node.js `22` in CI and Docker for client builds, configured in `.github/workflows/build.yml`, `.github/workflows/test.yml`, and `openmeet-client/Dockerfile`.
+- Node.js `26.7.0` for client tooling, CI, and Docker builds, pinned in `openmeet-client/package.json`, `openmeet-client/.nvmrc`, `.github/workflows/build.yml`, `.github/workflows/test.yml`, and `openmeet-client/Dockerfile`.
 - Rust toolchain `stable` in CI via `.github/workflows/build.yml` and `.github/workflows/test.yml`; Docker builds use `rust:1.91.1-bookworm` in `openmeet-server/Dockerfile`.
 - Tokio async runtime `1.49` for the Rust server, declared in `openmeet-server/Cargo.toml` and used by `#[tokio::main]` in `openmeet-server/src/main.rs`.
-- Client: Yarn Classic lockfile present at `openmeet-client/yarn.lock`; CI runs `yarn install --frozen-lockfile` from `.github/workflows/build.yml` and `.github/workflows/test.yml`.
+- Client: pnpm `11.20.0` is pinned in `openmeet-client/package.json`; `openmeet-client/pnpm-lock.yaml` is the canonical lockfile, `openmeet-client/pnpm-workspace.yaml` defines dependency-build policy, and CI uses `pnpm install --frozen-lockfile`.
 - Server: Cargo manifest present at `openmeet-server/Cargo.toml`; no `openmeet-server/Cargo.lock` detected in the repository even though CI cache keys reference it in `.github/workflows/build.yml` and `.github/workflows/test.yml`.
 - Root automation: Make targets wrap Docker Compose in `Makefile`.
 ## Frameworks
@@ -51,13 +50,12 @@ The immediate goal is not to redesign the product. It is to make the existing me
 - Playwright `^1.56.1` - E2E test runner configured in `openmeet-client/playwright.config.ts`.
 - Cargo test - server test command in `.github/workflows/test.yml`.
 - Vite via `rolldown-vite@latest` - client dev/build server in `openmeet-client/vite.config.ts` and scripts in `openmeet-client/package.json`.
-- Vue TSC `^3.1.1` - client type checking via `yarn type-check` in `openmeet-client/package.json` and `.github/workflows/build.yml`.
+- Vue TSC `^3.3.9` - client type checking via `pnpm type-check` in `openmeet-client/package.json` and `.github/workflows/build.yml`.
 - Tailwind CSS `^3.4.18` with `tailwindcss-animate` - styling pipeline configured in `openmeet-client/tailwind.config.js`.
 - ESLint `^9.37.0`, Oxlint `~1.23.0`, and Prettier `3.6.2` - client lint/format tooling configured in `openmeet-client/eslint.config.ts` and scripts in `openmeet-client/package.json`.
 - Docker multi-stage builds - client in `openmeet-client/Dockerfile`, server in `openmeet-server/Dockerfile`.
 - NGINX - static SPA serving in `openmeet-client/Dockerfile` and production reverse proxy in `deployment/nginx/nginx.conf`.
 ## Key Dependencies
-- `firebase` `^12.5.0` - declared in `openmeet-client/package.json`; no active imports detected under `openmeet-client/src`, so treat as unused until integration code exists.
 - `@vueuse/core` `^14.1.0` - Vue composition utilities available to client code from `openmeet-client/package.json`.
 - `reka-ui` `^2.6.1`, `shadcn-vue` `^2.3.3`, `lucide-vue-next` `^0.553.0`, `class-variance-authority`, `clsx`, and `tailwind-merge` - UI component and styling primitives used by components under `openmeet-client/src/components/ui/**`.
 - `tokio-tungstenite` `0.28` and Axum WebSocket support - WebSocket signaling in `openmeet-server/src/signaling/handler.rs`.
@@ -116,12 +114,12 @@ The immediate goal is not to redesign the product. It is to make the existing me
 - XState event unions are discriminated by `type`, for example `AuthEvents` in `openmeet-client/src/xstate/machines/auth/types.ts`.
 - Rust structs and type aliases use PascalCase, for example `AppState` in `openmeet-server/src/main.rs`, `DbPool` in `openmeet-server/src/db/mod.rs`, and `AuthResponse` in `openmeet-server/src/auth/models.rs`.
 ## Code Style
-- Use Prettier for client source formatting via `npm run format` / `yarn format`, defined as `prettier --write src/` in `openmeet-client/package.json`.
+- Use Prettier for client source formatting via `pnpm format`, defined as `prettier --write src/` in `openmeet-client/package.json`.
 - ESLint delegates formatting concerns to Prettier through `skipFormatting` from `@vue/eslint-config-prettier/skip-formatting` in `openmeet-client/eslint.config.ts`.
 - Client TypeScript and Vue code generally uses 2-space indentation, semicolon-terminated statements in most authored `.ts` files, and single quotes, as shown in `openmeet-client/src/services/auth-api.ts` and `openmeet-client/src/xstate/machines/auth/index.ts`.
 - Some generated or scaffolded config files omit semicolons, for example `openmeet-client/eslint.config.ts` and `openmeet-client/playwright.config.ts`; follow the surrounding file style when editing config.
 - Rust formatting follows standard `rustfmt` conventions: 4-space indentation, snake_case names, grouped `use` statements, and trailing commas in multi-line structures, as shown in `openmeet-server/src/main.rs` and `openmeet-server/src/auth/handlers.rs`.
-- Run client lint with `yarn lint` or `npm run lint` from `openmeet-client/`; this runs `lint:oxlint` then `lint:eslint` via `run-s lint:*` in `openmeet-client/package.json`.
+- Run client lint with `pnpm lint` from `openmeet-client/`; this runs `lint:oxlint` then `lint:eslint` via `run-s lint:*` in `openmeet-client/package.json`.
 - `lint:oxlint` runs `oxlint . --fix -D correctness --ignore-path .gitignore` from `openmeet-client/package.json`.
 - `lint:eslint` runs `eslint . --fix --cache` from `openmeet-client/package.json`.
 - ESLint targets `**/*.{ts,mts,tsx,vue}` and ignores `**/dist/**`, `**/dist-ssr/**`, and `**/coverage/**` in `openmeet-client/eslint.config.ts`.

@@ -45,14 +45,14 @@ analysis_date: 2026-06-19
 ## Code Style
 
 **Formatting:**
-- Use Prettier for client source formatting via `npm run format` / `yarn format`, defined as `prettier --write src/` in `openmeet-client/package.json`.
+- Use Prettier for client source formatting via `pnpm format`, defined as `prettier --write src/` in `openmeet-client/package.json`.
 - ESLint delegates formatting concerns to Prettier through `skipFormatting` from `@vue/eslint-config-prettier/skip-formatting` in `openmeet-client/eslint.config.ts`.
 - Client TypeScript and Vue code generally uses 2-space indentation, semicolon-terminated statements in most authored `.ts` files, and single quotes, as shown in `openmeet-client/src/services/auth-api.ts` and `openmeet-client/src/xstate/machines/auth/index.ts`.
 - Some generated or scaffolded config files omit semicolons, for example `openmeet-client/eslint.config.ts` and `openmeet-client/playwright.config.ts`; follow the surrounding file style when editing config.
 - Rust formatting follows standard `rustfmt` conventions: 4-space indentation, snake_case names, grouped `use` statements, and trailing commas in multi-line structures, as shown in `openmeet-server/src/main.rs` and `openmeet-server/src/auth/handlers.rs`.
 
 **Linting:**
-- Run client lint with `yarn lint` or `npm run lint` from `openmeet-client/`; this runs `lint:oxlint` then `lint:eslint` via `run-s lint:*` in `openmeet-client/package.json`.
+- Run client lint with `pnpm lint` from `openmeet-client/`; this runs `lint:oxlint` then `lint:eslint` via `run-s lint:*` in `openmeet-client/package.json`.
 - `lint:oxlint` runs `oxlint . --fix -D correctness --ignore-path .gitignore` from `openmeet-client/package.json`.
 - `lint:eslint` runs `eslint . --fix --cache` from `openmeet-client/package.json`.
 - ESLint targets `**/*.{ts,mts,tsx,vue}` and ignores `**/dist/**`, `**/dist-ssr/**`, and `**/coverage/**` in `openmeet-client/eslint.config.ts`.

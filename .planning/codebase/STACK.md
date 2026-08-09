@@ -12,7 +12,7 @@ source_scope: full repo
 ## Languages
 
 **Primary:**
-- TypeScript `~5.9.0` - Vue client source in `openmeet-client/src/**/*.ts` and Vue single-file components in `openmeet-client/src/**/*.vue`; configured by `openmeet-client/tsconfig.json`.
+- TypeScript `~6.0.3` - Vue client source in `openmeet-client/src/**/*.ts` and Vue single-file components in `openmeet-client/src/**/*.vue`; configured by `openmeet-client/tsconfig.json`.
 - Rust edition `2024` - SFU/API server in `openmeet-server/src/**/*.rs`; package metadata in `openmeet-server/Cargo.toml`.
 
 **Secondary:**
@@ -26,13 +26,12 @@ source_scope: full repo
 
 **Environment:**
 - Browser runtime for the Vue SPA mounted from `openmeet-client/src/main.ts`.
-- Node.js `^20.19.0 || >=22.12.0` for client tooling, declared in `openmeet-client/package.json`.
-- Node.js `22` in CI and Docker for client builds, configured in `.github/workflows/build.yml`, `.github/workflows/test.yml`, and `openmeet-client/Dockerfile`.
+- Node.js `26.7.0` for client tooling, CI, and Docker builds, pinned in `openmeet-client/package.json`, `openmeet-client/.nvmrc`, `.github/workflows/build.yml`, `.github/workflows/test.yml`, and `openmeet-client/Dockerfile`.
 - Rust toolchain `stable` in CI via `.github/workflows/build.yml` and `.github/workflows/test.yml`; Docker builds use `rust:1.91.1-bookworm` in `openmeet-server/Dockerfile`.
 - Tokio async runtime `1.49` for the Rust server, declared in `openmeet-server/Cargo.toml` and used by `#[tokio::main]` in `openmeet-server/src/main.rs`.
 
 **Package Manager:**
-- Client: Yarn Classic lockfile present at `openmeet-client/yarn.lock`; CI runs `yarn install --frozen-lockfile` from `.github/workflows/build.yml` and `.github/workflows/test.yml`.
+- Client: pnpm `11.20.0` is pinned in `openmeet-client/package.json`; `openmeet-client/pnpm-lock.yaml` is the canonical lockfile, `openmeet-client/pnpm-workspace.yaml` defines dependency-build policy, and CI uses `pnpm install --frozen-lockfile`.
 - Server: Cargo manifest present at `openmeet-server/Cargo.toml`; no `openmeet-server/Cargo.lock` detected in the repository even though CI cache keys reference it in `.github/workflows/build.yml` and `.github/workflows/test.yml`.
 - Root automation: Make targets wrap Docker Compose in `Makefile`.
 
@@ -54,7 +53,7 @@ source_scope: full repo
 
 **Build/Dev:**
 - Vite via `rolldown-vite@latest` - client dev/build server in `openmeet-client/vite.config.ts` and scripts in `openmeet-client/package.json`.
-- Vue TSC `^3.1.1` - client type checking via `yarn type-check` in `openmeet-client/package.json` and `.github/workflows/build.yml`.
+- Vue TSC `^3.3.9` - client type checking via `pnpm type-check` in `openmeet-client/package.json` and `.github/workflows/build.yml`.
 - Tailwind CSS `^3.4.18` with `tailwindcss-animate` - styling pipeline configured in `openmeet-client/tailwind.config.js`.
 - ESLint `^9.37.0`, Oxlint `~1.23.0`, and Prettier `3.6.2` - client lint/format tooling configured in `openmeet-client/eslint.config.ts` and scripts in `openmeet-client/package.json`.
 - Docker multi-stage builds - client in `openmeet-client/Dockerfile`, server in `openmeet-server/Dockerfile`.

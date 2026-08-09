@@ -18,7 +18,9 @@ services:
 
   frontend:
     container_name: openmeet_frontend
-    image: node:22-alpine
+    build:
+      context: ./openmeet-client
+      target: node-base
     working_dir: /app
     ports:
       - "5173:5173"
@@ -32,7 +34,7 @@ services:
       - VITE_TURN_URL=turn:${OPENMEET_DEV_HOST_IP:-localhost}:3478
       - VITE_TURN_USER=openmeet
       - VITE_TURN_PASSWORD=openmeet_dev_turn
-    command: sh -c "yarn install && yarn dev --host 0.0.0.0"
+    command: sh -c "pnpm install --frozen-lockfile && pnpm dev --host 0.0.0.0"
     depends_on:
       - sfu
       - coturn

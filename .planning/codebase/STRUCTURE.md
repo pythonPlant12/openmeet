@@ -37,11 +37,14 @@ openmeet/
 │   │   ├── App.vue             # App shell and global actor providers
 │   │   ├── main.ts             # Browser entry point
 │   │   └── utils.ts            # Cookie and JWT utilities
+│   ├── .dockerignore           # Frontend Docker build exclusions
 │   ├── Dockerfile              # Frontend multi-stage Docker build
 │   ├── docker-nginx.conf       # Container-local SPA Nginx config
 │   ├── package.json            # Client dependencies and scripts
 │   ├── vite.config.ts          # Vite and path alias config
-│   └── yarn.lock               # Client package lockfile
+│   ├── .nvmrc                  # Pinned client Node.js version
+│   ├── pnpm-lock.yaml          # Client package lockfile
+│   └── pnpm-workspace.yaml     # pnpm dependency-build policy
 ├── openmeet-server/            # Rust Axum SFU/API submodule
 │   ├── docs/                   # Server documentation
 │   ├── migrations/             # Diesel PostgreSQL migrations

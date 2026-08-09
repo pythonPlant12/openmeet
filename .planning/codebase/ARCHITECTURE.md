@@ -179,8 +179,8 @@ refreshed: 2026-06-19
 
 ### Build, Deploy, and Runtime Flow
 
-1. CI builds frontend with Node/Yarn and backend with Cargo (`.github/workflows/build.yml:14`, `.github/workflows/build.yml:49`).
-2. CI runs frontend lint/unit tests and backend `cargo test`/`cargo check` after build success (`.github/workflows/test.yml:13`, `.github/workflows/test.yml:42`).
+1. CI builds frontend with Node/pnpm and backend with Cargo (`.github/workflows/build.yml:17`, `.github/workflows/build.yml:63`).
+2. CI runs frontend lint/unit tests and backend `cargo test`/`cargo check` after build success (`.github/workflows/test.yml:16`, `.github/workflows/test.yml:51`).
 3. Deploy workflow SSHes to a VPS and runs `deploy.sh` (`.github/workflows/deploy.yml:30`).
 4. `deploy.sh` ensures certificates and env files exist, builds services, starts Docker Compose, then checks running containers (`deploy.sh:16`).
 5. Production Nginx routes `openmeets.eu` to the frontend container and `sfu.openmeets.eu` `/ws`, `/health`, `/auth/` to the SFU server (`deployment/nginx/nginx.conf:16`, `deployment/nginx/nginx.conf:46`).

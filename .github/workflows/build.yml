@@ -2,6 +2,9 @@
 
 name: Build
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [master]
@@ -19,24 +22,35 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: openmeet-client/package.json
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'yarn'
-          cache-dependency-path: openmeet-client/yarn.lock
+          node-version-file: openmeet-client/.nvmrc
+          cache: 'pnpm'
+          cache-dependency-path: openmeet-client/pnpm-lock.yaml
 
       - name: Install dependencies
         working-directory: openmeet-client
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Type check
         working-directory: openmeet-client
-        run: yarn type-check
+        run: pnpm type-check
 
       - name: Build
         working-directory: openmeet-client
-        run: yarn build
+        run: pnpm build
+
+      - name: Validate development Compose
+        run: docker compose -f docker-compose.dev.yml config --quiet
+
+      - name: Build production image
+        run: docker build --target prod openmeet-client
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
