@@ -108,7 +108,7 @@ for container in "${KNOWN_CONTAINERS[@]}"; do
     fi
 done
 
-REQUIRED_PORTS=(80 443 3000 3100 8080 9080 9090 9100)
+REQUIRED_PORTS=(80 443 3001 3100 8080 9080 9090 9100)
 
 for port in "${REQUIRED_PORTS[@]}"; do
     conflicting_containers="$(sudo docker ps --filter "publish=$port" --format '{{.Names}}')"
