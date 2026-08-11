@@ -23,7 +23,7 @@ services:
       target: node-base
     working_dir: /app
     ports:
-      - "5173:5173"
+      - "5174:5173"
     volumes:
       - ./openmeet-client:/app
       - /app/node_modules
@@ -45,14 +45,15 @@ services:
     ports:
       - "3478:3478/udp"
       - "3478:3478/tcp"
-      - "51001-52000:51001-52000/udp"
-      - "51001-52000:51001-52000/tcp"
+      # Keep dev media ports below the macOS ephemeral range (49152-65535).
+      - "40101-40200:40101-40200/udp"
+      - "40101-40200:40101-40200/tcp"
     command:
       - "-n"
       - "--log-file=stdout"
       - "--listening-port=3478"
-      - "--min-port=51001"
-      - "--max-port=52000"
+      - "--min-port=40101"
+      - "--max-port=40200"
       - "--fingerprint"
       - "--lt-cred-mech"
       - "--user=openmeet:openmeet_dev_turn"
@@ -69,7 +70,7 @@ services:
     working_dir: /app
     ports:
       - "8081:8081"
-      - "50000-51000:50000-51000/udp"
+      - "40000-40100:40000-40100/udp"
     volumes:
       - ./openmeet-server:/app
       - cargo_cache:/usr/local/cargo/registry
@@ -85,8 +86,8 @@ services:
       # Set OPENMEET_DEV_HOST_IP to the reachable host LAN/public IP when testing from phones or other laptops.
       # Without it, remote browsers receive Docker/loopback ICE candidates and media will not connect.
       - PUBLIC_IP=${OPENMEET_DEV_HOST_IP:-}
-      - UDP_PORT_MIN=50000
-      - UDP_PORT_MAX=51000
+      - UDP_PORT_MIN=40000
+      - UDP_PORT_MAX=40100
       - DATABASE_URL=postgres://openmeet:openmeet_dev@postgres:5432/openmeet
       - JWT_SECRET=dev_secret_change_in_production
       - ACCESS_TOKEN_MINUTES=15
