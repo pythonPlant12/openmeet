@@ -16,6 +16,26 @@ services:
       timeout: 5s
       retries: 5
 
+  seed:
+    container_name: openmeet_seed
+    image: postgres:16-alpine
+    environment:
+      - PGHOST=postgres
+      - PGUSER=openmeet
+      - PGPASSWORD=openmeet_dev
+      - PGDATABASE=openmeet
+    volumes:
+      - ./openmeet-server/dev/seed.sql:/seed.sql:ro
+    command:
+      - sh
+      - -c
+      - until psql -Atqc "SELECT to_regclass('public.conversations')" | grep -qx conversations; do sleep 1; done; psql -v ON_ERROR_STOP=1 -f /seed.sql
+    depends_on:
+      postgres:
+        condition: service_healthy
+      sfu:
+        condition: service_started
+
   frontend:
     container_name: openmeet_frontend
     build:
@@ -92,6 +112,7 @@ services:
       - JWT_SECRET=dev_secret_change_in_production
       - ACCESS_TOKEN_MINUTES=15
       - REFRESH_TOKEN_DAYS=7
+      - CORS_ALLOWED_ORIGINS=http://localhost:5174,http://127.0.0.1:5174
       - CARGO_TARGET_DIR=/app/target
       # jemalloc: return memory to OS (5 second decay)
       - MALLOC_CONF=background_thread:true,dirty_decay_ms:5000,muzzy_decay_ms:5000
