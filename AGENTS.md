@@ -361,6 +361,15 @@ Use these entry points:
 Do not make direct repo edits outside a GSD workflow unless the user explicitly asks to bypass it.
 <!-- GSD:workflow-end -->
 
+## Styling Guide
+
+- Light green hover surfaces (`#E6F4F1`, `#D8E7E3`, `#EDF8F5`) must use dark teal foreground (`#102F35` or `#27595D`), never white text or icons.
+- Primary teal actions keep white foreground and hover to darker teal (`#08635F`); do not combine white foreground with a light hover background.
+- Use `harbor-ghost-action` for ghost controls with light-green hover and `harbor-primary-action` for teal primary controls so global hover contrast stays enforced.
+- Hover is pointer-only; touch uses explicit active/selected state, never browser tap highlight or amber/brown feedback.
+- Inputs keep neutral `#D8E7E3` borders on focus with no dark-green corner ring. Dialogs use rounded Harbor surfaces, teal blur backdrop, and short Motion entry/exit animation.
+- Fixed workspaces use `100dvh` and scroll within panes; persistent pane headings/controls never scroll away.
+
 
 
 <!-- GSD:profile-start -->

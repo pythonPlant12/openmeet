@@ -47,6 +47,7 @@ services:
       - ./openmeet-server/.env
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - CORS_ALLOWED_ORIGINS=https://openmeets.eu,https://www.openmeets.eu
     volumes:
       - ./certs:/app/certs:ro
     networks:
