@@ -378,3 +378,7 @@ Do not make direct repo edits outside a GSD workflow unless the user explicitly 
 > Profile not yet configured. Run `/gsd-profile-user` to generate your developer profile.
 > This section is managed by `generate-claude-profile` -- do not edit manually.
 <!-- GSD:profile-end -->
+
+## Deployment
+
+- OpenMeet deployment has exclusive use of its VPS. `deploy.sh` stops and removes every Docker container before rebuilding and starting the Compose stack; do not weaken this cleanup without confirming the host runs no unrelated workloads.

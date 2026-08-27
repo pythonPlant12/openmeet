@@ -82,44 +82,14 @@ fi
 echo "=== Stopping existing containers ==="
 sudo docker compose down --remove-orphans || true
 
-# Compose project names have changed over time on this VPS, and some services use
-# fixed container_name values. Remove stale Docker containers that can keep ports
-# bound even after `docker compose down --remove-orphans` misses them.
-echo "=== Clearing Docker port conflicts ==="
-KNOWN_CONTAINERS=(
-    grafana
-    openmeet_nginx
-    openmeet_sfu
-    openmeet_postgres
-    loki
-    cadvisor
-    openmeet_coturn
-    openmeet_certbot
-    promtail
-    prometheus
-    openmeet_frontend
-    node-exporter
-)
-
-for container in "${KNOWN_CONTAINERS[@]}"; do
-    if sudo docker ps -a --format '{{.Names}}' | grep -Fxq "$container"; then
-        echo "Removing stale container: $container"
-        sudo docker rm -f "$container" >/dev/null 2>&1 || true
-    fi
-done
-
-REQUIRED_PORTS=(80 443 3001 3100 8080 9080 9090 9100)
-
-for port in "${REQUIRED_PORTS[@]}"; do
-    conflicting_containers="$(sudo docker ps --filter "publish=$port" --format '{{.Names}}')"
-    if [ -n "$conflicting_containers" ]; then
-        echo "Removing Docker containers using port $port:"
-        echo "$conflicting_containers"
-        while IFS= read -r container; do
-            [ -n "$container" ] && sudo docker rm -f "$container" >/dev/null 2>&1 || true
-        done <<< "$conflicting_containers"
-    fi
-done
+# Deployment has exclusive use of this VPS. Compose project labels from prior
+# releases cannot be trusted, so remove every remaining container before startup.
+ALL_CONTAINER_IDS="$(sudo docker ps -aq)"
+if [ -n "$ALL_CONTAINER_IDS" ]; then
+    echo "=== Removing all remaining Docker containers ==="
+    sudo docker stop $ALL_CONTAINER_IDS >/dev/null 2>&1 || true
+    sudo docker rm $ALL_CONTAINER_IDS >/dev/null 2>&1 || true
+fi
 
 # Build and start services
 echo "=== Building services ==="
