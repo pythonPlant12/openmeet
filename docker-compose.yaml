@@ -48,6 +48,11 @@ services:
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       - CORS_ALLOWED_ORIGINS=https://openmeets.eu,https://www.openmeets.eu
+      - RUSTFS_ENDPOINT=http://rustfs:9000
+      - RUSTFS_ACCESS_KEY=${RUSTFS_ACCESS_KEY}
+      - RUSTFS_SECRET_KEY=${RUSTFS_SECRET_KEY}
+      - RUSTFS_REGION=${RUSTFS_REGION:-us-east-1}
+      - RUSTFS_AVATAR_BUCKET=${RUSTFS_AVATAR_BUCKET:-openmeet-avatars}
     volumes:
       - ./certs:/app/certs:ro
     networks:
@@ -56,12 +61,44 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      rustfs:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "8081"]
       interval: 30s
       timeout: 5s
       retries: 3
 
+  rustfs-volume-permissions:
+    image: alpine:3.22.1
+    volumes:
+      - rustfs_data:/data
+    command: sh -c "chown -R 10001:10001 /data"
+    restart: "no"
+
+  rustfs:
+    container_name: openmeet_rustfs
+    image: rustfs/rustfs:1.0.0-rc.5
+    environment:
+      - RUSTFS_VOLUMES=/data
+      - RUSTFS_ADDRESS=0.0.0.0:9000
+      - RUSTFS_CONSOLE_ADDRESS=0.0.0.0:9001
+      - RUSTFS_ACCESS_KEY=${RUSTFS_ACCESS_KEY}
+      - RUSTFS_SECRET_KEY=${RUSTFS_SECRET_KEY}
+    volumes:
+      - rustfs_data:/data
+    networks:
+      - openmeet_network
+    restart: unless-stopped
+    depends_on:
+      rustfs-volume-permissions:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
   # TURN Server - CoTURN for NAT traversal
   coturn:
     container_name: openmeet_coturn
@@ -208,6 +245,7 @@ volumes:
   postgres_data:
   prometheus_data:
   grafana_data:
+  rustfs_data:
 
 # Networks
 networks:
