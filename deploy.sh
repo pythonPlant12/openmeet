@@ -15,6 +15,21 @@ set -a
 source .env
 set +a
 
+# RustFS needs stable credentials shared by the storage service and SFU. Generate
+# them once for existing deployments that predate avatar storage.
+if [ -z "${RUSTFS_ACCESS_KEY:-}" ] || [ -z "${RUSTFS_SECRET_KEY:-}" ]; then
+    RUSTFS_ACCESS_KEY="openmeet_$(openssl rand -hex 12)"
+    RUSTFS_SECRET_KEY="$(openssl rand -hex 32)"
+    {
+        echo
+        echo "# RustFS avatar storage credentials"
+        echo "RUSTFS_ACCESS_KEY=$RUSTFS_ACCESS_KEY"
+        echo "RUSTFS_SECRET_KEY=$RUSTFS_SECRET_KEY"
+    } >> .env
+    export RUSTFS_ACCESS_KEY RUSTFS_SECRET_KEY
+    echo "[OK] Generated RustFS storage credentials"
+fi
+
 DOMAIN="${DOMAIN:-openmeets.eu}"
 EMAIL="${SSL_EMAIL:-admin@openmeets.eu}"
 

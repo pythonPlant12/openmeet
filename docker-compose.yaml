@@ -74,6 +74,8 @@ services:
     volumes:
       - rustfs_data:/data
     command: sh -c "chown -R 10001:10001 /data"
+    networks:
+      - openmeet_network
     restart: "no"
 
   rustfs:
