@@ -36,6 +36,25 @@ services:
       sfu:
         condition: service_started
 
+  avatar-seed:
+    container_name: openmeet_avatar_seed
+    image: minio/mc:latest
+    entrypoint: ["/bin/sh", "-c"]
+    volumes:
+      - ./openmeet-server/dev/avatars:/avatars:ro
+    command:
+      - |
+        until mc alias set local http://rustfs:9000 openmeet_dev_rustfs openmeet_dev_rustfs_secret; do sleep 1; done
+        mc mb --ignore-existing local/openmeet-avatars
+        for file in /avatars/*.svg; do
+          mc cp --attr "Content-Type=image/svg+xml" "$$file" "local/openmeet-avatars/dev/avatars/$$(basename "$$file")"
+        done
+    depends_on:
+      rustfs:
+        condition: service_healthy
+      seed:
+        condition: service_completed_successfully
+
   frontend:
     container_name: openmeet_frontend
     build:
