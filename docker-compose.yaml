@@ -79,7 +79,7 @@ services:
     restart: "no"
 
   rustfs:
-    container_name: openmeet_rustfs
+    container_name: openmeet_object_storage
     image: rustfs/rustfs:1.0.0-rc.5
     environment:
       - RUSTFS_VOLUMES=/data

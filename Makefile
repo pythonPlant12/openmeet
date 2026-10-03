@@ -9,6 +9,9 @@ build-dev: ## Build dev images
 dev: ## Start local development (frontend + SFU)
 	$(DEV_COMPOSE) up -d
 
+dev-logs:
+	$(DEV_COMPOSE) up -d && $(DEV_COMPOSE) logs -f
+
 restart: 
 	$(DEV_COMPOSE) down
 	$(DEV_COMPOSE) up -d
