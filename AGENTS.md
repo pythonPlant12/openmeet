@@ -1,4 +1,3 @@
-<!-- GSD:project-start source:PROJECT.md -->
 ## Project
 
 **OpenMeet Multi-Participant Media Stability**
@@ -17,9 +16,7 @@ The immediate goal is not to redesign the product. It is to make the existing me
 - **Scope**: Start with the smallest stable two-user flow before widening to late joiners and 3+ participant cases.
 - **Security**: Do not introduce new token, CORS, room-join, or TURN credential exposure while debugging media flow.
 - **Concurrency**: Avoid holding long-lived room locks across async WebRTC operations when fixing server forwarding behavior.
-<!-- GSD:project-end -->
 
-<!-- GSD:stack-start source:codebase/STACK.md -->
 ## Technology Stack
 
 ## Languages
@@ -84,9 +81,7 @@ The immediate goal is not to redesign the product. It is to make the existing me
 - Public hosts are routed by NGINX in `deployment/nginx/nginx.conf`: `openmeets.eu` for the frontend, `sfu.openmeets.eu` for WebSocket/API, `grafana.openmeets.eu` for Grafana, and `turn.openmeets.eu` included in TLS redirect coverage.
 - Production containers are defined in `docker-compose.yaml`; local/dev containers are defined in `docker-compose.dev.yml`.
 - TLS certificates are expected under Let's Encrypt paths referenced by `deployment/nginx/nginx.conf`; Certbot renewal is configured in `docker-compose.yaml`.
-<!-- GSD:stack-end -->
 
-<!-- GSD:conventions-start source:CONVENTIONS.md -->
 ## Conventions
 
 ## Naming Patterns
@@ -175,9 +170,7 @@ The immediate goal is not to redesign the product. It is to make the existing me
 - Rust modules are declared from `openmeet-server/src/main.rs` and grouped by feature directories (`auth`, `db`, `signaling`, `sfu`). Each feature exposes a `mod.rs` such as `openmeet-server/src/auth/mod.rs` and `openmeet-server/src/sfu/mod.rs`.
 - Use barrel files for UI primitive folders so consumers import from folder roots, for example `import { Button } from '@/components/ui/button'` in `openmeet-client/src/pages/LoginPage.vue`.
 - Avoid adding broad app-level barrels unless there is an existing folder-level convention; current barrels are local to UI primitives and Rust feature modules.
-<!-- GSD:conventions-end -->
 
-<!-- GSD:architecture-start source:ARCHITECTURE.md -->
 ## Architecture
 
 ## System Overview
@@ -339,27 +332,13 @@ The immediate goal is not to redesign the product. It is to make the existing me
 - Use XState `onError` transitions for auth and media initialization (`openmeet-client/src/xstate/machines/auth/index.ts`, `openmeet-client/src/xstate/machines/webrtc/index.ts`).
 - Use `cleanup` + `resetContext` when leaving or retrying calls (`openmeet-client/src/xstate/machines/webrtc/index.ts:448`).
 - Log server errors with `tracing::{error,warn,info}` in signaling/SFU modules.
-## Cross-Cutting Concerns
-<!-- GSD:architecture-end -->
+## Engineering Approach
 
-<!-- GSD:skills-start source:skills/ -->
-## Project Skills
-
-No project skills found. Add skills to any of: `.claude/skills/`, `.agents/skills/`, `.cursor/skills/`, `.github/skills/`, or `.codex/skills/` with a `SKILL.md` index file.
-<!-- GSD:skills-end -->
-
-<!-- GSD:workflow-start source:GSD defaults -->
-## GSD Workflow Enforcement
-
-Before using Edit, Write, or other file-changing tools, start work through a GSD command so planning artifacts and execution context stay in sync.
-
-Use these entry points:
-- `/gsd-quick` for small fixes, doc updates, and ad-hoc tasks
-- `/gsd-debug` for investigation and bug fixing
-- `/gsd-execute-phase` for planned phase work
-
-Do not make direct repo edits outside a GSD workflow unless the user explicitly asks to bypass it.
-<!-- GSD:workflow-end -->
+- Work like a senior engineer on a brownfield codebase: read the surrounding code first, then make the smallest change that fixes the root cause.
+- Reuse existing patterns, helpers, components, and naming. Do not add a new abstraction, library, or pattern when one already exists in the codebase.
+- UI work uses the Harbor design system: existing tokens, `src/components/ui/**` primitives, the Styling Guide below, and `docs/STYLING.md`. Do not invent new colors, spacing, or one-off component styles.
+- Keep changes focused on the task. Report unrelated problems instead of fixing them silently.
+- A change is complete only when it is verified: relevant tests, type checks, and lint pass, and behavior changes are checked in the running app where feasible.
 
 ## Styling Guide
 
@@ -369,15 +348,6 @@ Do not make direct repo edits outside a GSD workflow unless the user explicitly 
 - Hover is pointer-only; touch uses explicit active/selected state, never browser tap highlight or amber/brown feedback.
 - Inputs keep neutral `#D8E7E3` borders on focus with no dark-green corner ring. Dialogs use rounded Harbor surfaces, teal blur backdrop, and short Motion entry/exit animation.
 - Fixed workspaces use `100dvh` and scroll within panes; persistent pane headings/controls never scroll away.
-
-
-
-<!-- GSD:profile-start -->
-## Developer Profile
-
-> Profile not yet configured. Run `/gsd-profile-user` to generate your developer profile.
-> This section is managed by `generate-claude-profile` -- do not edit manually.
-<!-- GSD:profile-end -->
 
 ## Deployment
 
