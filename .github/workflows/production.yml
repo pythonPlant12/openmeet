@@ -13,7 +13,7 @@ on:
 jobs:
   build-client:
     name: Build Frontend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
         with:
@@ -51,7 +51,7 @@ jobs:
 
   build-server:
     name: Build Backend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
         with:
@@ -82,7 +82,7 @@ jobs:
 
   test-client:
     name: Test Frontend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [build-client, build-server]
     steps:
       - uses: actions/checkout@v7
@@ -115,7 +115,7 @@ jobs:
 
   test-server:
     name: Test Backend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [build-client, build-server]
     steps:
       - uses: actions/checkout@v7
@@ -144,7 +144,7 @@ jobs:
 
   deploy:
     name: Deploy on VPS
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     needs: [test-client, test-server]
     if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
