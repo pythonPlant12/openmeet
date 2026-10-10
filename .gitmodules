@@ -4,3 +4,6 @@
 [submodule "openmeet-server"]
 	path = openmeet-server
 	url = https://github.com/pythonPlant12/openmeet-server.git
+[submodule "openmeet-native"]
+	path = openmeet-native
+	url = https://github.com/pythonPlant12/openmeet-native.git

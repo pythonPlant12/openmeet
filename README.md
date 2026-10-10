@@ -6,6 +6,7 @@ OpenMeet is a browser-based video meeting application with a Vue 3 client and a 
 
 - `openmeet-client/` - Vue 3 frontend.
 - `openmeet-server/` - Rust API, auth, signaling, and SFU server.
+- `openmeet-native/` - Tauri desktop app that wraps `openmeet-client`. See [`openmeet-native/README.md`](openmeet-native/README.md) for dev and build instructions.
 - `docker-compose.dev.yml` - local development stack.
 - `docker-compose.yaml` - production stack.
 - `deployment/` - Nginx and CoTURN production configuration.

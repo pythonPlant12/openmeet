@@ -320,7 +320,7 @@ The immediate goal is not to redesign the product. It is to make the existing me
 - **NAT traversal:** Client and server both rely on STUN/TURN configuration. Client defaults live in `openmeet-client/src/services/webrtc-sfu.ts`; server peer connection config reads env vars in `openmeet-server/src/signaling/handler.rs` and `openmeet-server/src/sfu/peer_connection.rs`.
 - **TLS edge:** Production TLS termination and route selection are owned by Nginx config in `deployment/nginx/nginx.conf`; the Rust server also supports direct TLS through `USE_TLS` in `openmeet-server/src/main.rs`.
 - **Background jobs:** No scheduler/queue subsystem exists. Background work is request/connection-scoped Tokio tasks spawned by signaling and room media flows.
-- **Submodules:** `openmeet-client/` and `openmeet-server/` are Git submodules declared in `.gitmodules`.
+- **Submodules:** `openmeet-client/`, `openmeet-server/`, and `openmeet-native/` (Tauri desktop shell around the client) are Git submodules declared in `.gitmodules`.
 ## Anti-Patterns
 ### Putting side-effect services into XState context
 ### Changing signaling on one side only
