@@ -7,3 +7,6 @@
 [submodule "openmeet-native"]
 	path = openmeet-native
 	url = https://github.com/pythonPlant12/openmeet-native.git
+	# Private repo, not needed to deploy the web app: CI and deploy.sh skip it.
+	# Fetch it with: git submodule update --init --checkout openmeet-native
+	update = none

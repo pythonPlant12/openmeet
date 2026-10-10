@@ -59,7 +59,7 @@ pnpm build             # builds openmeet-client, then the release bundles
 cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
 ```
 
-Release builds serve the client from `http://localhost:47652`. That origin must be in the server's `CORS_ALLOWED_ORIGINS`. See `openmeet-native/README.md`. CI does not build the native app yet.
+`openmeet-native` is private and marked `update = none` in `.gitmodules`, so CI and deploys skip it; fetch it with `git submodule update --init --checkout openmeet-native`. Release builds serve the client from `http://localhost:47652`. That origin must be in the server's `CORS_ALLOWED_ORIGINS`. See `openmeet-native/README.md`. CI does not build the native app yet.
 
 ### Safety
 
