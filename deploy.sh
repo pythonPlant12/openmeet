@@ -86,16 +86,49 @@ if [ ! -d "$CERT_PATH" ]; then
         --no-eff-email \
         -d "$DOMAIN" \
         -d "www.$DOMAIN" \
-        -d "sfu.$DOMAIN"
+        -d "sfu.$DOMAIN" \
+        -d "admin.$DOMAIN"
 
     echo "[OK] SSL certificates obtained"
 else
     echo "[OK] SSL certificates found"
 fi
 
+# The admin panel is a private submodule. Build and run it only when this checkout has it.
+COMPOSE_PROFILES_ARGS=""
+if [ -f "openmeet-admin/package.json" ]; then
+    COMPOSE_PROFILES_ARGS="--profile admin"
+    echo "[OK] Admin panel found, deploying admin.$DOMAIN"
+
+    # Certificates issued before the admin panel existed do not cover admin.$DOMAIN. The running nginx still
+    # answers ACME challenges here. A failure (for example, no DNS record yet) must not stop the deployment.
+    if ! sudo openssl x509 -in "$CERT_PATH/fullchain.pem" -noout -ext subjectAltName 2>/dev/null | grep -q "admin.$DOMAIN"; then
+        echo "=== Adding admin.$DOMAIN to the SSL certificate ==="
+        sudo docker run --rm \
+            -v "$(pwd)/openmeet/certbot/conf:/etc/letsencrypt" \
+            -v "$(pwd)/openmeet/certbot/www:/var/www/certbot" \
+            certbot/certbot certonly \
+            --webroot \
+            --webroot-path=/var/www/certbot \
+            --email "$EMAIL" \
+            --agree-tos \
+            --no-eff-email \
+            --expand \
+            --cert-name "$DOMAIN" \
+            -d "$DOMAIN" \
+            -d "www.$DOMAIN" \
+            -d "sfu.$DOMAIN" \
+            -d "admin.$DOMAIN" \
+            && echo "[OK] Certificate now covers admin.$DOMAIN" \
+            || echo "[WARN] Could not add admin.$DOMAIN to the certificate. Check its DNS record."
+    fi
+else
+    echo "[SKIP] openmeet-admin not checked out, admin panel not deployed"
+fi
+
 # Stop existing containers
 echo "=== Stopping existing containers ==="
-sudo docker compose down --remove-orphans || true
+sudo docker compose --profile admin down --remove-orphans || true
 
 # Deployment has exclusive use of this VPS. Compose project labels from prior
 # releases cannot be trusted, so remove every remaining container before startup.
@@ -108,10 +141,10 @@ fi
 
 # Build and start services
 echo "=== Building services ==="
-sudo docker compose build
+sudo docker compose $COMPOSE_PROFILES_ARGS build
 
 echo "=== Starting services ==="
-sudo docker compose up -d
+sudo docker compose $COMPOSE_PROFILES_ARGS up -d
 
 # Wait for services
 echo "=== Waiting for services to start ==="

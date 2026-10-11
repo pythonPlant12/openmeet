@@ -11,6 +11,7 @@ Claude Code configuration for OpenMeet. `AGENTS.md` is the shared source of trut
 `.planning/codebase/*` and the Stack, Conventions, and Architecture sections of `AGENTS.md` were generated on 2026-06-19. They predate this later work, so verify against the code before you rely on them:
 
 - **Social/messenger workspace**: friends, groups, conversations, messages, notifications, and call sessions live in `openmeet-server/src/social/` and `openmeet-client/src/components/dashboard-page/`. Live updates stream from `social/events.rs`.
+- **Admin panel**: `openmeet-admin/` is a private submodule (Vue SPA, `admin.openmeets.eu`, dev port `5175`). Its API is `openmeet-server/src/admin/`. Roles and permissions are in the `roles`, `permissions`, and `role_permissions` tables; `openmeet-server/src/auth/permissions.rs` defines the permission catalog and the `require_permission` check. A new permission needs a migration row and a `Permission` variant.
 - **Object storage**: RustFS (S3-compatible) stores avatars. The server code is in `openmeet-server/src/storage.rs`, and RustFS runs as the `rustfs` service in both Compose files.
 - **Migrations**: there are many more than the two auth migrations listed in `AGENTS.md`. See `openmeet-server/migrations/`.
 - **Lockfile**: `openmeet-server/Cargo.lock` now exists.
@@ -19,7 +20,7 @@ Claude Code configuration for OpenMeet. `AGENTS.md` is the shared source of trut
 
 ### Repository mechanics
 
-- `openmeet-client/`, `openmeet-server/`, and `openmeet-native/` are Git submodules with their own branches and history. Commit inside each submodule first. Then commit the updated submodule pointer in the root repo (existing style: `chore: advance workspace submodule revisions`).
+- `openmeet-client/`, `openmeet-server/`, `openmeet-native/`, and `openmeet-admin/` are Git submodules with their own branches and history. Commit inside each submodule first. Then commit the updated submodule pointer in the root repo (existing style: `chore: advance workspace submodule revisions`).
 - Keep the same branch name across the root and every submodule that one change touches.
 - Commit messages use Conventional Commits with a scope, for example `fix(sfu): ...`, `feat(workspace): ...`, `ci: ...`.
 - NEVER add Claude attribution of any kind: no `Co-Authored-By: Claude` trailer, no "Generated with Claude Code" line, no AI mention in commit messages, PR titles, or PR descriptions. All git and GitHub operations are done only in the user's name, with the configured git identity and no extra authors.
@@ -58,6 +59,8 @@ pnpm dev               # loads the dev frontend on 5174, so run `make dev` first
 pnpm build             # builds openmeet-client, then the release bundles
 cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
 ```
+
+Admin panel (run in `openmeet-admin/`, uses pnpm only): `pnpm type-check`, `pnpm lint`, `pnpm test:unit --run`, `pnpm build`. Like `openmeet-native`, it is private and marked `update = none`; `make dev` and `deploy.sh` include it only when it is checked out.
 
 `openmeet-native` is private and marked `update = none` in `.gitmodules`, so CI and deploys skip it; fetch it with `git submodule update --init --checkout openmeet-native`. Release builds serve the client from `http://localhost:47652`. That origin must be in the server's `CORS_ALLOWED_ORIGINS`. See `openmeet-native/README.md`. CI does not build the native app yet.
 
