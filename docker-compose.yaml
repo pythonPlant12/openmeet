@@ -35,6 +35,24 @@ services:
       timeout: 5s
       retries: 3
 
+  # Admin panel - Vue 3. Private submodule: deploy.sh enables the admin profile only when it is checked out.
+  admin:
+    profiles: [admin]
+    container_name: openmeet_admin
+    build:
+      context: ./openmeet-admin
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=https://sfu.${DOMAIN:-openmeets.eu}
+    networks:
+      - openmeet_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
   # SFU - Rust WebRTC (Selective Forwarding Unit)
   sfu:
     container_name: openmeet_sfu
@@ -47,7 +65,7 @@ services:
       - ./openmeet-server/.env
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
-      - CORS_ALLOWED_ORIGINS=https://openmeets.eu,https://www.openmeets.eu
+      - CORS_ALLOWED_ORIGINS=https://openmeets.eu,https://www.openmeets.eu,https://admin.openmeets.eu
       - RUSTFS_ENDPOINT=http://rustfs:9000
       - RUSTFS_ACCESS_KEY=${RUSTFS_ACCESS_KEY}
       - RUSTFS_SECRET_KEY=${RUSTFS_SECRET_KEY}

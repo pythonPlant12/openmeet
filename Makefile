@@ -1,6 +1,8 @@
 .PHONY: dev stop-dev build start stop logs clean help
 
-DEV_COMPOSE = docker compose -f docker-compose.dev.yml
+# openmeet-admin is a private submodule; run its container only when it is checked out.
+ADMIN_PROFILE = $(if $(wildcard openmeet-admin/package.json),--profile admin,)
+DEV_COMPOSE = docker compose -f docker-compose.dev.yml $(ADMIN_PROFILE)
 PROD_COMPOSE = docker compose -f docker-compose.yaml
 
 build-dev: ## Build dev images
