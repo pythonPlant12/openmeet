@@ -342,9 +342,10 @@ The immediate goal is not to redesign the product. It is to make the existing me
 
 ## Styling Guide
 
-- Light green hover surfaces (`#E6F4F1`, `#D8E7E3`, `#EDF8F5`) must use dark teal foreground (`#102F35` or `#27595D`), never white text or icons.
+- Colors come only from the Harbor palette tokens in `openmeet-client/src/assets/index.css` (`--harbor-*`), exposed as Tailwind `harbor-*` colors (`text-harbor-ink`, `bg-harbor-hover`, `border-harbor-line`, `shadow-harbor-soft`, ...). Do not add raw hex utility classes for palette colors. The palette is neutral slate/white (ink, muted, icon, line, hover); `harbor-accent` (teal) is the single accent (primary "+" actions, unread badges, outgoing bubble `harbor-accent-soft`). Dark scopes, such as full-screen meetings, restyle content by redefining the tokens.
+- Gray hover surfaces (`#F0F2F5`, `#E9EDEF`) use dark foreground (`#111B21` or `#3B4A54`), never white text or icons.
 - Primary teal actions keep white foreground and hover to darker teal (`#08635F`); do not combine white foreground with a light hover background.
-- Use `harbor-ghost-action` for ghost controls with light-green hover and `harbor-primary-action` for teal primary controls so global hover contrast stays enforced.
+- Use `harbor-ghost-action` for ghost controls with gray hover and `harbor-primary-action` for teal primary controls so global hover contrast stays enforced. Use the shared components: `RoundButton`/`RoundButtonGroup` (`ui/round-button`; tones `default`, `accent`, `soft`, `plain`, `danger`), `Avatar` (`ui/avatar`), `ListRow`/`ListHeading` (`ui/list-row`) for every list, `SearchPill` (`ui/search-pill`), and `PaneHeader` (`dashboard-page/PaneHeader.vue`) for sidebar panes. Dropdown and context menus are styled by the `ui/` primitives; pass `variant="danger"` for destructive items instead of adding classes. The liquid bubble stays.
 - Hover is pointer-only; touch uses explicit active/selected state, never browser tap highlight or amber/brown feedback.
 - Inputs keep neutral `#D8E7E3` borders on focus with no dark-green corner ring. Dialogs use rounded Harbor surfaces, teal blur backdrop, and short Motion entry/exit animation.
 - Fixed workspaces use `100dvh` and scroll within panes; persistent pane headings/controls never scroll away.

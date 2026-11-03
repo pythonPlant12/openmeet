@@ -2,9 +2,11 @@
 
 ## Harbor Actions
 
-- Light green hover surfaces (`#E6F4F1`, `#D8E7E3`, `#EDF8F5`) require dark teal text and icons (`#102F35` or `#27595D`). Never use white foreground on these surfaces.
+- All colors come from the Harbor palette tokens (`--harbor-*` in `src/assets/index.css`, Tailwind `harbor-*` colors and `shadow-harbor-*` shadows). The palette is neutral slate and white; `harbor-accent` (teal) is the only accent. Do not add raw hex classes for palette colors; dark scopes redefine the tokens.
+- Gray hover surfaces (`#F0F2F5`, `#E9EDEF`) require dark text and icons (`#111B21` or `#3B4A54`). Never use white foreground on these surfaces.
 - Primary teal actions use `#0B7A75` with white foreground and hover to `#08635F`.
-- Apply `harbor-ghost-action` to ghost controls using light-green hover states. It enforces dark foreground.
+- Apply `harbor-ghost-action` to ghost controls using gray hover states. It enforces dark foreground.
+- Shared components: `RoundButton` / `RoundButtonGroup` (white disc with soft shadow; tones `accent`, `soft`, `plain`, `danger`), `Avatar`, `ListRow` / `ListHeading` (avatar, title, time on the right, gray second line, separator after the avatar, hover actions on pointer devices), `SearchPill`, and `PaneHeader`. Menus get their style from the `ui/` dropdown and context menu primitives; use `variant="danger"` for destructive items. Notifications (toasts, the incoming call bar) are white cards with `shadow-harbor-float`.
 - Apply `harbor-primary-action` to teal primary actions. It enforces white foreground and dark-teal hover.
 - Do not introduce amber, brown, or orange interactive states. Destructive/error states may use existing coral tokens only where meaning requires them.
 
@@ -12,7 +14,7 @@
 
 - Hover behavior applies only to fine-pointer hover devices. Do not rely on `:hover` for touch feedback.
 - Disable browser tap highlight globally. A touched icon changes appearance only when it has explicit selected or active state.
-- Active icon controls use `#E6F4F1` with `#102F35` foreground; each control owns its own state.
+- Active icon controls use `#F0F2F5` with `#111B21` foreground; each control owns its own state.
 - Inputs retain `#D8E7E3` borders on focus. Do not add dark-green border corners, focus rings, or offsets to text inputs.
 
 ## Motion and Layers
