@@ -69,3 +69,17 @@ Admin panel (run in `openmeet-admin/`, uses pnpm only): `pnpm type-check`, `pnpm
 - Never read, print, or commit real `.env` files, TLS material in `certs/`, VPS credentials, or TURN secrets. The `.env.example` files are templates only.
 - Do not run `deploy.sh` and do not SSH to the VPS unless the user explicitly asks. `deploy.sh` removes every Docker container on the host.
 - Ask before you push, open PRs, or do anything that touches production.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and specs are local Markdown files under `.scratch/<feature>/`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five default triage roles, each label equal to its role name (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one `GLOSSARY.md` and `docs/adr/` at the repo root cover the root and every submodule. See `docs/agents/domain.md`.
