@@ -1,6 +1,6 @@
 # 02: Chat view title transition and view-switch haptics
 
-**What to build:** Changing the chat view blurs the old title out (about 120 ms), swaps the word at peak blur, and blurs the new title in (about 120 ms); the search placeholder swaps at the same moment. With reduced motion the title swaps instantly. Every pane's top-right view switch, and the header swipe, plays one `selection` haptic per view change.
+**What to build:** Changing the chat view blurs the old title out (about 200 ms), swaps the word at peak blur, and blurs the new title in (about 200 ms); the search placeholder swaps at the same moment. With reduced motion the title swaps instantly. Every pane's top-right view switch, and the header swipe, plays one `selection` haptic per view change.
 
 **Blocked by:** None (can start immediately).
 

@@ -28,7 +28,7 @@ Swipe-back works in every chat, empty or not. Changing the chat view blurs the o
 ## Implementation Decisions
 
 - The swipe-back gesture in the chat pane excludes interactive targets; the empty state of a chat must not block the gesture. Find the root cause (an excluded element covering the empty chat, or an area that does not receive the pointer events) and fix it there, without widening the excluded list.
-- The title transition is about 120 ms blur-and-fade out, word swap at peak blur, about 120 ms blur-and-fade in, built with the motion library the sidebar already uses. `prefers-reduced-motion` swaps without animation.
+- The title transition is about 200 ms blur-and-fade out, word swap at peak blur, about 200 ms blur-and-fade in, built with the motion library the sidebar already uses. `prefers-reduced-motion` swaps without animation.
 - The chat view switch and the header swipe both call the existing haptics service with the `selection` feedback once per committed view change.
 - Glossary terms: **Chat view** (Chats, Group chats, Friends chats).
 
