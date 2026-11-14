@@ -34,6 +34,10 @@ _Avoid_: Gallery
 The call screen layout with one large tile and the other tiles in a strip. The large tile shows the pinned person, or else the person speaking.
 _Avoid_: Spotlight, focus, theater mode
 
+**Name tag**:
+The small label on a tile with the person's name, which shrinks to a muted-mic icon while the call controls are hidden.
+_Avoid_: Name badge, label, caption
+
 **Pin**:
 Your own choice of who fills the large tile in the speaker layout. Only you see it.
 _Avoid_: Spotlight (for everyone), feature
