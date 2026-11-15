@@ -22,6 +22,10 @@ _Avoid_: Meeting page, room page
 The meeting or call you are connected to, which keeps running while you use the rest of the workspace.
 _Avoid_: Current room, ongoing session
 
+**Live call**:
+A call that at least one person is connected to right now, whether or not you are in it. Members of its conversation can join it at any time.
+_Avoid_: Ongoing call, call in progress, active call (for a call you are not in)
+
 **Mini call**:
 The small floating view of the active call shown while the call screen is collapsed.
 _Avoid_: PiP, call bubble, Voice connected panel
