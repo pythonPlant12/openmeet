@@ -4,11 +4,11 @@
 
 **Blocked by:** None (can start immediately).
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Conversations carry `liveCall: { id, memberIds } | null` on the list and single-conversation responses; direct conversations get it only for a call between the two people, groups for any member. `memberIds` are the users currently connected to the call's room.
-- [ ] The client re-fetches conversations on the existing calls live-update event so the ring tracks joins and leaves without a reload.
-- [ ] One new Harbor token set for the three gradient stops; no raw hex in components.
-- [ ] The picture's presence border gets an "in live call" state drawn as the gradient; presence border classes are not applied while it shows; the presence dot stays; presence returns when the call ends.
-- [ ] Ring on conversations list rows and the chat header picture only; message sender pictures unchanged; rows still open the chat on click.
-- [ ] Conversations sidebar and chat pane component tests cover both display rules, the no-ring case for someone else's call, and the border replacement.
+- [x] Conversations carry `liveCall: { id, memberIds } | null` on the list and single-conversation responses; direct conversations get it only for a call between the two people, groups for any member. `memberIds` are the users currently connected to the call's room.
+- [x] The client re-fetches conversations on the existing calls live-update event so the ring tracks joins and leaves without a reload.
+- [x] One new Harbor token set for the three gradient stops; no raw hex in components.
+- [x] The picture's presence border gets an "in live call" state drawn as the gradient; presence border classes are not applied while it shows; the presence dot stays; presence returns when the call ends.
+- [x] Ring on conversations list rows and the chat header picture only; message sender pictures unchanged; rows still open the chat on click.
+- [x] Conversations sidebar and chat pane component tests cover both display rules, the no-ring case for someone else's call, and the border replacement.
