@@ -4,10 +4,10 @@
 
 **Blocked by:** 01 (Shared corner drag for the self-view), 05 (The call outlives the call screen).
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Mute, leave and expand buttons on the tile, using the shared call button style; no button that opens the conversation.
-- [ ] Buttons appear on hover on desktop and on a press on touch; the video stays clear otherwise.
-- [ ] Drag to any corner through the shared corner-drag composable; the corner is remembered for the session.
-- [ ] Phone bottom bar and safe-area insets are passed as edges so the tile is never hidden or clipped.
-- [ ] Mini call component test: mute, leave and expand emit; hover and press reveal; drag ends in the nearest corner and the corner is kept.
+- [x] Mute, leave and expand buttons on the tile, using the shared call button style; no button that opens the conversation.
+- [x] Buttons appear on hover on desktop and on a press on touch; the video stays clear otherwise.
+- [x] Drag to any corner through the shared corner-drag composable; the corner is remembered for the session.
+- [x] Phone bottom bar and safe-area insets are passed as edges so the tile is never hidden or clipped.
+- [x] Mini call component test: mute, leave and expand emit; hover and press reveal; drag ends in the nearest corner and the corner is kept.

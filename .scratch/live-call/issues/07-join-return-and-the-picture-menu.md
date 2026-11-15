@@ -4,9 +4,9 @@
 
 **Blocked by:** 02 (Pressing call joins the live call), 03 (Live call ring in the list and chat header), 05 (The call outlives the call screen).
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] The header reads the conversation's live call and the active call's session id to pick call buttons, Join, or Return to call; Join turns back into the call buttons when the live call ends.
-- [ ] Join starts a call on the conversation and navigates to the returned session; Return to call expands the active call without a prompt.
-- [ ] The picture button opens a dropdown built from the existing menu primitives, only while a live call exists, with the two items worded per direct or group and per joined or not.
-- [ ] Chat pane component test covers the three button states, the menu's items and wording, and the direct Profile or Group info click without a live call.
+- [x] The header reads the conversation's live call and the active call's session id to pick call buttons, Join, or Return to call; Join turns back into the call buttons when the live call ends.
+- [x] Join starts a call on the conversation and navigates to the returned session; Return to call expands the active call without a prompt.
+- [x] The picture button opens a dropdown built from the existing menu primitives, only while a live call exists, with the two items worded per direct or group and per joined or not.
+- [x] Chat pane component test covers the three button states, the menu's items and wording, and the direct Profile or Group info click without a live call.
