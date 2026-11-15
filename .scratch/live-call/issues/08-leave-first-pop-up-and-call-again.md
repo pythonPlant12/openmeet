@@ -4,10 +4,10 @@
 
 **Blocked by:** 02 (Pressing call joins the live call), 05 (The call outlives the call screen).
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] One app-level confirm dialog built from the existing dialog primitives, used by every entry point that would join a different room while a call is active.
-- [ ] Cancel leaves the active call untouched; Leave and join ends it and continues into the new call.
-- [ ] Returning to the active call from any entry point never prompts.
-- [ ] Call again on a conversation with a live call joins that call.
-- [ ] Dashboard chat state test: the pop-up appears for Join and Call again while another call is active, Cancel keeps the call, and Call again joins a live call.
+- [x] One app-level confirm dialog built from the existing dialog primitives, used by every entry point that would join a different room while a call is active.
+- [x] Cancel leaves the active call untouched; Leave and join ends it and continues into the new call.
+- [x] Returning to the active call from any entry point never prompts.
+- [x] Call again on a conversation with a live call joins that call.
+- [x] Dashboard chat state test: the pop-up appears for Join and Call again while another call is active, Cancel keeps the call, and Call again joins a live call.
