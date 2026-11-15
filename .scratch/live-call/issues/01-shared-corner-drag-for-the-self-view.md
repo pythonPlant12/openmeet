@@ -4,10 +4,10 @@
 
 **Blocked by:** None (can start immediately).
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] One corner-drag composable owns pointer capture, the drag threshold, the live offset and the snap to the nearest corner; the video grid's inline self-view drag code is removed.
-- [ ] During a drag the picture moves with a transform only and no transition; only the snap animates, with the existing snap easing.
-- [ ] A move under the threshold is a tap and does not change the corner; a drag does not pin, long-press or hide the call controls.
-- [ ] Safe-area edges are passed in, so the picture keeps clear of the notch and home indicator in full screen as today.
-- [ ] Composable test with pointer events: follows the pointer, snaps to the nearest corner on release, keeps the corner, treats a short move as a tap. The video grid's self-view test still passes.
+- [x] One corner-drag composable owns pointer capture, the drag threshold, the live offset and the snap to the nearest corner; the video grid's inline self-view drag code is removed.
+- [x] During a drag the picture moves with a transform only and no transition; only the snap animates, with the existing snap easing.
+- [x] A move under the threshold is a tap and does not change the corner; a drag does not pin, long-press or hide the call controls.
+- [x] Safe-area edges are passed in, so the picture keeps clear of the notch and home indicator in full screen as today.
+- [x] Composable test with pointer events: follows the pointer, snaps to the nearest corner on release, keeps the corner, treats a short move as a tap. The video grid's self-view test still passes.
